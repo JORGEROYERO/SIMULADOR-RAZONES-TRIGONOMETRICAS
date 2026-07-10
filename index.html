@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Simulador Razones Trigonométricas · IETAL</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #f7f4ee; }
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useMemo } = React;
+
+// ============================================================
+//  SIMULADOR · RAZONES TRIGONOMÉTRICAS BÁSICAS (Seno, Coseno, Tangente)
+//  Institución Educativa Técnica Agropecuaria de Luruaco
+// ------------------------------------------------------------
+//  CONFIGURA AQUÍ LA URL DE TU APPS SCRIPT.
+//  Debe ser la URL de IMPLEMENTACIÓN como aplicación web
+//  (Implementar > Nueva implementación > Aplicación web) y
+//  terminar en /exec. NO sirve la URL del editor (/edit).
+//  Ejemplo: https://script.google.com/macros/s/AKfyc.../exec
+const SCRIPT_URL =
+  "https://script.google.com/macros/s/PEGA_AQUI_TU_ID_DE_IMPLEMENTACION/exec";
+// ============================================================
+
+const ASIGNATURA = "Simulador Razones Trigonométricas";
+const MAX_COLUMNAS = 15;
+
+const C = {
+  ink: "#0f2a3f",
+  inkSoft: "#1e3a52",
+  amber: "#d98326",
+  paper: "#f7f4ee",
+  card: "#ffffff",
+  line: "#dfe5e3",
+  good: "#1f7a4d",
+  bad: "#b3402f",
+  muted: "#5b6b73",
+};
+
+// ---------- Figura del triángulo rectángulo (3 orientaciones) ----------
+
+function Triangulo({ orient = "A", adj, op, hip, angleLabel = "θ" }) {
+  const cfgs = {
+    A: {
+      pts: "40,170 230,170 230,50",
+      sq: <rect x="212" y="152" width="18" height="18" fill="none" stroke={C.ink} strokeWidth="1.5" />,
+      arc: <path d="M 70,170 A 30,30 0 0 0 58,144" fill="none" stroke={C.amber} strokeWidth="1.5" />,
+      theta: [72, 152],
+      adjPos: [135, 192],
+      opPos: [253, 110],
+      hipPos: [102, 90],
+    },
+    B: {
+      pts: "230,170 40,170 40,50",
+      sq: <rect x="40" y="152" width="18" height="18" fill="none" stroke={C.ink} strokeWidth="1.5" />,
+      arc: <path d="M 200,170 A 30,30 0 0 1 212,144" fill="none" stroke={C.amber} strokeWidth="1.5" />,
+      theta: [184, 152],
+      adjPos: [135, 192],
+      opPos: [16, 110],
+      hipPos: [168, 90],
+    },
+    C: {
+      pts: "40,170 40,50 230,50",
+      sq: <rect x="40" y="50" width="18" height="18" fill="none" stroke={C.ink} strokeWidth="1.5" />,
+      arc: <path d="M 40,140 A 30,30 0 0 1 66,164" fill="none" stroke={C.amber} strokeWidth="1.5" />,
+      theta: [54, 138],
+      adjPos: [12, 110],
+      opPos: [135, 34],
+      hipPos: [160, 124],
+    },
+  };
+  const cfg = cfgs[orient];
+  return (
+    <svg viewBox="0 0 280 210" width="100%" style={{ maxWidth: 300 }}>
+      <polygon points={cfg.pts} fill="none" stroke={C.ink} strokeWidth="2" />
+      {cfg.sq}
+      {cfg.arc}
+      <text x={cfg.theta[0]} y={cfg.theta[1]} fontSize="13" fill={C.amber} fontWeight="700">{angleLabel}</text>
+      <text x={cfg.adjPos[0]} y={cfg.adjPos[1]} fontSize="14" textAnchor="middle" fill={C.inkSoft} fontWeight="700">{adj}</text>
+      <text x={cfg.opPos[0]} y={cfg.opPos[1]} fontSize="14" textAnchor="middle" fill={C.inkSoft} fontWeight="700">{op}</text>
+      <text x={cfg.hipPos[0]} y={cfg.hipPos[1]} fontSize="14" textAnchor="middle" fill={C.inkSoft} fontWeight="700">{hip}</text>
+    </svg>
+  );
+}
+
+// ============================================================
+//  NIVEL FÁCIL (15 preguntas) — H1 identificar lados · H2 calcular · H3 hallar lado
+// ============================================================
+const PREGUNTAS_FACIL = [
+  { n: 1, enunciado: "Observa el triángulo. ¿Qué letra representa el lado OPUESTO al ángulo θ?",
+    figura: <Triangulo orient="A" adj="m" op="n" hip="p" />,
+    opciones: ["m", "n", "p", "No se puede determinar"], correcta: 1 },
+  { n: 2, enunciado: "¿Cuál letra representa la HIPOTENUSA de este triángulo?",
+    figura: <Triangulo orient="B" adj="x" op="y" hip="z" />,
+    opciones: ["x", "y", "z", "Ninguna de las anteriores"], correcta: 2 },
+  { n: 3, enunciado: "¿Qué letra corresponde al lado ADYACENTE al ángulo θ?",
+    figura: <Triangulo orient="C" adj="a" op="b" hip="c" />,
+    opciones: ["a", "b", "c", "No se puede determinar"], correcta: 0 },
+  { n: 4, enunciado: "¿Cuál es el lado OPUESTO al ángulo θ en este triángulo?",
+    figura: <Triangulo orient="A" adj="p" op="q" hip="r" />,
+    opciones: ["p", "q", "r", "Depende del valor de θ"], correcta: 1 },
+  { n: 5, enunciado: "En cualquier triángulo rectángulo, la hipotenusa siempre es el lado que está...",
+    figura: <Triangulo orient="B" adj="d" op="e" hip="f" />,
+    opciones: ["Opuesto al ángulo recto (el lado más largo)", "Adyacente al ángulo θ", "Opuesto al ángulo θ", "Igual a la suma de los catetos"], correcta: 0 },
+  { n: 6, enunciado: "El triángulo tiene catetos 4 (adyacente) y 3 (opuesto), con hipotenusa 5. Calcula sin θ.",
+    figura: <Triangulo orient="A" adj="4" op="3" hip="5" />,
+    opciones: ["3/5", "4/5", "3/4", "4/3"], correcta: 0 },
+  { n: 7, enunciado: "El triángulo tiene catetos 8 (adyacente) y 6 (opuesto), con hipotenusa 10. Calcula cos θ.",
+    figura: <Triangulo orient="B" adj="8" op="6" hip="10" />,
+    opciones: ["3/5", "4/5", "3/4", "5/4"], correcta: 1 },
+  { n: 8, enunciado: "El triángulo tiene catetos 12 (adyacente) y 5 (opuesto), con hipotenusa 13. Calcula tan θ.",
+    figura: <Triangulo orient="C" adj="12" op="5" hip="13" />,
+    opciones: ["5/12", "12/5", "5/13", "12/13"], correcta: 0 },
+  { n: 9, enunciado: "El triángulo tiene catetos 12 (adyacente) y 9 (opuesto), con hipotenusa 15. Calcula sin θ como decimal.",
+    figura: <Triangulo orient="A" adj="12" op="9" hip="15" />,
+    opciones: ["0.6", "0.8", "0.75", "1.33"], correcta: 0 },
+  { n: 10, enunciado: "El triángulo tiene catetos 15 (adyacente) y 8 (opuesto), con hipotenusa 17. Calcula tan θ (dos decimales).",
+    figura: <Triangulo orient="B" adj="15" op="8" hip="17" />,
+    opciones: ["0.53", "0.47", "1.88", "0.88"], correcta: 0 },
+  { n: 11, enunciado: "La hipotenusa mide 10 y el ángulo marcado es 30°. Usa sin 30° = 0.5 para hallar el lado opuesto (?).",
+    figura: <Triangulo orient="A" adj="?" op="?" hip="10" angleLabel="30°" />,
+    opciones: ["5", "8.66", "5.77", "10"], correcta: 0 },
+  { n: 12, enunciado: "El lado adyacente mide 12 y el ángulo es 45°. Usa tan 45° = 1 para hallar el lado opuesto (?).",
+    figura: <Triangulo orient="A" adj="12" op="?" hip="?" angleLabel="45°" />,
+    opciones: ["12", "6", "24", "8.49"], correcta: 0 },
+  { n: 13, enunciado: "La hipotenusa mide 20 y el ángulo es 60°. Usa cos 60° = 0.5 para hallar el lado adyacente (?).",
+    figura: <Triangulo orient="B" adj="?" op="?" hip="20" angleLabel="60°" />,
+    opciones: ["10", "17.32", "20", "5"], correcta: 0 },
+  { n: 14, enunciado: "El lado opuesto mide 9 y el ángulo es 30°. Usa sin 30° = 0.5 para hallar la hipotenusa (?).",
+    figura: <Triangulo orient="A" adj="?" op="9" hip="?" angleLabel="30°" />,
+    opciones: ["18", "4.5", "9", "15.59"], correcta: 0 },
+  { n: 15, enunciado: "El lado adyacente mide 5 y el ángulo es 60°. Usa tan 60° = 1.73 para hallar el lado opuesto (?).",
+    figura: <Triangulo orient="A" adj="5" op="?" hip="?" angleLabel="60°" />,
+    opciones: ["8.65", "2.89", "10", "5.77"], correcta: 0 },
+];
+
+// ============================================================
+//  NIVEL INTERMEDIO (15 preguntas)
+// ============================================================
+const PREGUNTAS_INTERMEDIO = [
+  { n: 1, enunciado: "En el triángulo, θ es el ángulo marcado. Si en vez de θ tomamos el OTRO ángulo agudo β (vértice superior), ¿qué lado sería ahora el opuesto a β?",
+    figura: <Triangulo orient="A" adj="m" op="n" hip="p" />,
+    opciones: ["m", "n", "p", "Sigue siendo n"], correcta: 0 },
+  { n: 2, enunciado: "Tomando el otro ángulo agudo β en lugar de θ, ¿cuál lado sería el ADYACENTE a β?",
+    figura: <Triangulo orient="B" adj="x" op="y" hip="z" />,
+    opciones: ["z", "x", "y", "No cambia"], correcta: 2 },
+  { n: 3, enunciado: "¿Cambia la hipotenusa si en lugar de θ consideramos el otro ángulo agudo β?",
+    figura: <Triangulo orient="C" adj="a" op="b" hip="c" />,
+    opciones: ["No, la hipotenusa es la misma para ambos ángulos agudos", "Sí, se convierte en el lado a", "Sí, se convierte en el lado b", "No se puede saber"], correcta: 0 },
+  { n: 4, enunciado: "En un triángulo rectángulo el ángulo θ mide 40°. ¿Cuánto mide el otro ángulo agudo β?",
+    opciones: ["50°", "60°", "140°", "90°"], correcta: 0 },
+  { n: 5, enunciado: "Si θ y β son los dos ángulos agudos de un triángulo rectángulo, ¿qué relación existe entre sin θ y cos β?",
+    opciones: ["sin θ = cos β", "sin θ = sin β", "cos θ = cos β", "tan θ = tan β"], correcta: 0 },
+  { n: 6, enunciado: "Triángulo con catetos 24 (adyacente) y 7 (opuesto), hipotenusa 25. Calcula sin θ (dos decimales).",
+    figura: <Triangulo orient="A" adj="24" op="7" hip="25" />,
+    opciones: ["0.28", "0.96", "0.29", "0.72"], correcta: 0 },
+  { n: 7, enunciado: "Triángulo con catetos 20 (adyacente) y 21 (opuesto), hipotenusa 29. Calcula cos θ (dos decimales).",
+    figura: <Triangulo orient="B" adj="20" op="21" hip="29" />,
+    opciones: ["0.69", "0.72", "0.97", "0.31"], correcta: 0 },
+  { n: 8, enunciado: "Triángulo con catetos 40 (adyacente) y 9 (opuesto), hipotenusa 41. Calcula tan θ (dos decimales).",
+    figura: <Triangulo orient="C" adj="40" op="9" hip="41" />,
+    opciones: ["0.23", "4.44", "0.22", "0.9"], correcta: 0 },
+  { n: 9, enunciado: "Si sin θ = 0.6, ¿cuánto vale cos θ? (Usa sin²θ + cos²θ = 1)",
+    opciones: ["0.8", "0.4", "0.64", "1.6"], correcta: 0 },
+  { n: 10, enunciado: "Triángulo con catetos 5 (adyacente) y 12 (opuesto), hipotenusa 13. Calcula sin θ (dos decimales).",
+    figura: <Triangulo orient="A" adj="5" op="12" hip="13" />,
+    opciones: ["0.92", "0.38", "2.4", "0.42"], correcta: 0 },
+  { n: 11, enunciado: "Una rampa forma un ángulo de 30° con el suelo. Si la rampa (hipotenusa) mide 8 metros, ¿cuál es la altura que alcanza (lado opuesto)? Usa sin 30° = 0.5.",
+    opciones: ["4 m", "6.93 m", "8 m", "2 m"], correcta: 0 },
+  { n: 12, enunciado: "Un cable de una antena forma un ángulo de 60° con el suelo y está anclado a 5 metros de la base (adyacente). ¿Cuál es la altura de la antena (opuesto)? Usa tan 60° ≈ 1.73.",
+    opciones: ["8.65 m", "2.89 m", "10 m", "5.77 m"], correcta: 0 },
+  { n: 13, enunciado: "Una escalera de 6 metros (hipotenusa) se apoya contra una pared formando un ángulo de 45° con el suelo. ¿A qué altura llega? Usa sin 45° ≈ 0.71.",
+    opciones: ["4.26 m", "8.45 m", "3 m", "6 m"], correcta: 0 },
+  { n: 14, enunciado: "El ángulo de elevación hasta la punta de un árbol es 30°, desde un punto a 15 metros de la base (adyacente). ¿Qué altura tiene el árbol (opuesto)? Usa tan 30° ≈ 0.58.",
+    opciones: ["8.7 m", "25.86 m", "7.5 m", "17.32 m"], correcta: 0 },
+  { n: 15, enunciado: "Calcula el lado adyacente si el ángulo es 60° y la hipotenusa mide 14 m. Usa cos 60° = 0.5.",
+    opciones: ["7 m", "12.12 m", "14 m", "3.5 m"], correcta: 0 },
+];
+
+// ============================================================
+//  NIVEL AVANZADO (15 preguntas)
+// ============================================================
+const PREGUNTAS_AVANZADO = [
+  { n: 1, enunciado: "Si duplicas la longitud de todos los lados de un triángulo rectángulo (conservando sus ángulos), ¿qué sucede con el valor de sin θ?",
+    opciones: ["No cambia, sigue siendo el mismo valor", "Se duplica", "Se reduce a la mitad", "Se eleva al cuadrado"], correcta: 0 },
+  { n: 2, enunciado: "En un triángulo rectángulo, si el ángulo θ se acerca a 90°, ¿qué le sucede al valor de tan θ?",
+    opciones: ["Crece indefinidamente (tiende a infinito)", "Se acerca a 0", "Se mantiene en 1", "Se vuelve negativo"], correcta: 0 },
+  { n: 3, enunciado: "¿Cuánto vale sin θ + cos θ cuando θ = 45°? Usa sin 45° = cos 45° ≈ 0.71.",
+    opciones: ["1.42", "1", "0.71", "2"], correcta: 0 },
+  { n: 4, enunciado: "Si tan θ = 1, ¿cuánto mide el ángulo θ?",
+    opciones: ["45°", "30°", "60°", "90°"], correcta: 0 },
+  { n: 5, enunciado: "En un triángulo rectángulo isósceles (los dos catetos son iguales), ¿cuánto miden los ángulos agudos?",
+    opciones: ["45° cada uno", "30° y 60°", "60° cada uno", "Uno de 90°"], correcta: 0 },
+  { n: 6, enunciado: "Si cos θ = 0.28, ¿cuánto vale sin θ? Usa sin²θ + cos²θ = 1.",
+    opciones: ["0.96", "0.72", "0.28", "1.28"], correcta: 0 },
+  { n: 7, enunciado: "Si sin θ = 0.8, ¿cuál es el valor de tan θ? (Primero halla cos θ con la identidad pitagórica)",
+    opciones: ["1.33", "0.6", "0.75", "1.6"], correcta: 0 },
+  { n: 8, enunciado: "Triángulo con catetos 21 (adyacente) y 20 (opuesto), hipotenusa 29. Calcula sin θ × cos θ (dos decimales).",
+    figura: <Triangulo orient="C" adj="21" op="20" hip="29" />,
+    opciones: ["0.50", "0.69", "0.72", "1.41"], correcta: 0 },
+  { n: 9, enunciado: "Si tan θ = 3/4, ¿cuánto vale sin θ? (Piensa en el triángulo 3-4-5)",
+    opciones: ["0.6", "0.75", "0.8", "1.33"], correcta: 0 },
+  { n: 10, enunciado: "En un triángulo rectángulo, cos θ = 0.6. Sabiendo que cos 53° ≈ 0.6, ¿cuánto mide θ aproximadamente?",
+    opciones: ["53°", "37°", "60°", "30°"], correcta: 0 },
+  { n: 11, enunciado: "Desde la punta de un faro de 25 m de altura, el ángulo de depresión hacia un barco es de 35°. Usa tan 35° ≈ 0.70 para hallar la distancia horizontal del barco a la base del faro.",
+    opciones: ["35.71 m", "17.5 m", "25 m", "43.86 m"], correcta: 0 },
+  { n: 12, enunciado: "Un dron vuela a 40 m de altura. El ángulo de elevación desde un observador en el suelo es de 50°. Usa tan 50° ≈ 1.19 para hallar la distancia horizontal al punto bajo el dron.",
+    opciones: ["33.6 m", "47.6 m", "40 m", "21.2 m"], correcta: 0 },
+  { n: 13, enunciado: "Una cometa está sujeta por un hilo de 50 m que forma un ángulo de 65° con el suelo. Usa sin 65° ≈ 0.91 para hallar la altura de la cometa.",
+    opciones: ["45.5 m", "54.9 m", "21.1 m", "50 m"], correcta: 0 },
+  { n: 14, enunciado: "El ángulo de elevación al tope de un edificio desde un punto a 60 m de su base es de 42°. Usa tan 42° ≈ 0.90 para hallar la altura del edificio.",
+    opciones: ["54 m", "66.7 m", "60 m", "27 m"], correcta: 0 },
+  { n: 15, enunciado: "Una persona observa la punta de una torre con un ángulo de elevación de 55° desde un punto a 20 m de la base. Usa tan 55° ≈ 1.43 para hallar la altura de la torre.",
+    opciones: ["28.6 m", "20 m", "14.3 m", "33.4 m"], correcta: 0 },
+];
+
+// ============================================================
+//  NIVEL ESPECIAL · APRENDIZAJE GUIADO (10 problemas, 3 pasos c/u)
+//  Pensado para estudiantes con dificultades de aprendizaje:
+//  siempre el mismo triángulo 3-4-5 (escalado), sin θ ≈ 0.6, cos θ ≈ 0.8
+// ============================================================
+const PROBLEMAS_ESPECIAL = [
+  { n: 1, adj: "?", op: "3", hip: "5", buscar: "adyacente",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo? (mira dónde está el signo ?)",
+        opciones: ["La hipotenusa", "El lado adyacente", "El lado opuesto"], correcta: 1 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
+        opciones: ["Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)"], correcta: 2 },
+      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 5 × 0.8 =",
+        opciones: ["3", "4", "6"], correcta: 1 },
+    ] },
+  { n: 2, adj: "4", op: "?", hip: "5", buscar: "opuesto",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
+        opciones: ["El lado opuesto", "La hipotenusa", "El lado adyacente"], correcta: 0 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
+        opciones: ["Coseno (adyacente/hipotenusa)", "Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)"], correcta: 2 },
+      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 5 × 0.6 =",
+        opciones: ["4", "3", "2"], correcta: 1 },
+    ] },
+  { n: 3, adj: "?", op: "6", hip: "10", buscar: "adyacente",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
+        opciones: ["El lado adyacente", "El lado opuesto", "La hipotenusa"], correcta: 0 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
+        opciones: ["Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 1 },
+      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 10 × 0.8 =",
+        opciones: ["8", "10", "6"], correcta: 0 },
+    ] },
+  { n: 4, adj: "8", op: "?", hip: "10", buscar: "opuesto",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
+        opciones: ["La hipotenusa", "El lado opuesto", "El lado adyacente"], correcta: 1 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
+        opciones: ["Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)"], correcta: 1 },
+      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 10 × 0.6 =",
+        opciones: ["8", "5", "6"], correcta: 2 },
+    ] },
+  { n: 5, adj: "?", op: "9", hip: "15", buscar: "adyacente",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
+        opciones: ["El lado opuesto", "La hipotenusa", "El lado adyacente"], correcta: 2 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
+        opciones: ["Coseno (adyacente/hipotenusa)", "Seno (opuesto/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 0 },
+      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 15 × 0.8 =",
+        opciones: ["12", "9", "18"], correcta: 0 },
+    ] },
+  { n: 6, adj: "12", op: "?", hip: "15", buscar: "opuesto",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
+        opciones: ["La hipotenusa", "El lado adyacente", "El lado opuesto"], correcta: 2 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
+        opciones: ["Seno (opuesto/hipotenusa)", "Tangente (opuesto/adyacente)", "Coseno (adyacente/hipotenusa)"], correcta: 0 },
+      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 15 × 0.6 =",
+        opciones: ["9", "12", "7.5"], correcta: 0 },
+    ] },
+  { n: 7, adj: "?", op: "12", hip: "20", buscar: "adyacente",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
+        opciones: ["El lado adyacente", "La hipotenusa", "El lado opuesto"], correcta: 0 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
+        opciones: ["Tangente (opuesto/adyacente)", "Coseno (adyacente/hipotenusa)", "Seno (opuesto/hipotenusa)"], correcta: 1 },
+      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 20 × 0.8 =",
+        opciones: ["16", "20", "12"], correcta: 0 },
+    ] },
+  { n: 8, adj: "16", op: "?", hip: "20", buscar: "opuesto",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
+        opciones: ["El lado opuesto", "El lado adyacente", "La hipotenusa"], correcta: 0 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
+        opciones: ["Coseno (adyacente/hipotenusa)", "Seno (opuesto/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 1 },
+      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 20 × 0.6 =",
+        opciones: ["16", "10", "12"], correcta: 2 },
+    ] },
+  { n: 9, adj: "?", op: "15", hip: "25", buscar: "adyacente",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
+        opciones: ["La hipotenusa", "El lado opuesto", "El lado adyacente"], correcta: 2 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
+        opciones: ["Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 1 },
+      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 25 × 0.8 =",
+        opciones: ["15", "20", "22"], correcta: 1 },
+    ] },
+  { n: 10, adj: "20", op: "?", hip: "25", buscar: "opuesto",
+    pasos: [
+      { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
+        opciones: ["El lado adyacente", "El lado opuesto", "La hipotenusa"], correcta: 1 },
+      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
+        opciones: ["Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)"], correcta: 1 },
+      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 25 × 0.6 =",
+        opciones: ["20", "15", "10"], correcta: 1 },
+    ] },
+];
+
+const NIVELES = [
+  { id: "Fácil", desc: "15 preguntas · Conceptos básicos: identificar lados y calcular razones", preguntas: PREGUNTAS_FACIL },
+  { id: "Intermedio", desc: "15 preguntas · Cálculos con decimales y problemas de aplicación", preguntas: PREGUNTAS_INTERMEDIO },
+  { id: "Avanzado", desc: "15 preguntas · Retos, identidades trigonométricas y contexto real", preguntas: PREGUNTAS_AVANZADO },
+  { id: "Especial (NEE)", desc: "10 problemas guiados paso a paso · Ideal si necesitas más apoyo", preguntas: null },
+];
+
+// ---------- App ----------
+
+function App() {
+  const [fase, setFase] = useState("registro");
+  const [nombre, setNombre] = useState("");
+  const [curso, setCurso] = useState("");
+  const [nivel, setNivel] = useState(null);
+  const [idx, setIdx] = useState(0);
+  const [respuestas, setRespuestas] = useState([]);
+  const [enviado, setEnviado] = useState(false);
+
+  // Estado del modo guiado (Especial)
+  const [probIdx, setProbIdx] = useState(0);
+  const [pasoIdx, setPasoIdx] = useState(0);
+  const [respGuiado, setRespGuiado] = useState(
+    PROBLEMAS_ESPECIAL.map(() => [null, null, null])
+  );
+
+  const esGuiado = nivel === "Especial (NEE)";
+  const PREGUNTAS = esGuiado ? null : (NIVELES.find((nv) => nv.id === nivel) || {}).preguntas;
+  const total = esGuiado ? PROBLEMAS_ESPECIAL.length : (PREGUNTAS ? PREGUNTAS.length : 0);
+  const contestadas = esGuiado ? 0 : respuestas.filter((r) => r !== null).length;
+
+  const resultado = useMemo(() => {
+    if (esGuiado) {
+      let correctas = 0;
+      respGuiado.forEach((pasos, i) => {
+        const prob = PROBLEMAS_ESPECIAL[i];
+        const ok = pasos.every((r, j) => r === prob.pasos[j].correcta);
+        if (ok) correctas++;
+      });
+      return { correctas, pct: Math.round((correctas / PROBLEMAS_ESPECIAL.length) * 100), incorrectas: PROBLEMAS_ESPECIAL.length - correctas };
+    }
+    if (!PREGUNTAS) return { correctas: 0, pct: 0, incorrectas: 0 };
+    let correctas = 0;
+    respuestas.forEach((r, i) => { if (r === PREGUNTAS[i].correcta) correctas++; });
+    return { correctas, pct: Math.round((correctas / total) * 100), incorrectas: total - correctas };
+  }, [respuestas, respGuiado, total, esGuiado, PREGUNTAS]);
+
+  const elegir = (op) => {
+    const nuevo = [...respuestas];
+    nuevo[idx] = op;
+    setRespuestas(nuevo);
+  };
+
+  const elegirGuiado = (op) => {
+    const nuevo = respGuiado.map((p) => [...p]);
+    nuevo[probIdx][pasoIdx] = op;
+    setRespGuiado(nuevo);
+  };
+
+  const iniciar = () => { if (nombre.trim() && curso.trim()) setFase("nivel"); };
+
+  const elegirNivel = (nv) => {
+    setNivel(nv.id);
+    if (nv.id === "Especial (NEE)") {
+      setProbIdx(0);
+      setPasoIdx(0);
+      setRespGuiado(PROBLEMAS_ESPECIAL.map(() => [null, null, null]));
+      setFase("guiado");
+    } else {
+      setRespuestas(Array(nv.preguntas.length).fill(null));
+      setIdx(0);
+      setFase("examen");
+    }
+  };
+
+  const enviarSheets = () => {
+    let pArr = [];
+    if (esGuiado) {
+      for (let i = 0; i < PROBLEMAS_ESPECIAL.length; i++) {
+        const prob = PROBLEMAS_ESPECIAL[i];
+        const ok = respGuiado[i].every((r, j) => r === prob.pasos[j].correcta);
+        pArr.push(ok ? "✓" : "✗");
+      }
+    } else {
+      pArr = PREGUNTAS.map((q, i) => {
+        if (respuestas[i] === null) return "-";
+        return respuestas[i] === q.correcta ? "✓" : "✗";
+      });
+    }
+    while (pArr.length < MAX_COLUMNAS) pArr.push("-");
+
+    const url =
+      SCRIPT_URL +
+      "?asignatura=" + encodeURIComponent(ASIGNATURA) +
+      "&nombre=" + encodeURIComponent(nombre) +
+      "&curso=" + encodeURIComponent(curso) +
+      "&nivel=" + encodeURIComponent(nivel) +
+      "&correctas=" + resultado.correctas +
+      "&incorrectas=" + resultado.incorrectas +
+      "&porcentaje=" + resultado.pct +
+      "&fecha=" + encodeURIComponent(new Date().toLocaleString("es-CO")) +
+      pArr.map((v, i) => "&p" + (i + 1) + "=" + encodeURIComponent(v)).join("");
+    window.open(url, "_blank");
+    setEnviado(true);
+  };
+
+  const ff = "'Segoe UI', system-ui, -apple-system, sans-serif";
+
+  // ---- Registro ----
+  if (fase === "registro") {
+    const listo = nombre.trim() && curso.trim();
+    return (
+      <div style={{ ...wrap, fontFamily: ff }}>
+        <div style={{ ...card, maxWidth: 460, margin: "0 auto", padding: 0, overflow: "hidden" }}>
+          <div style={{ background: C.ink, color: "#fff", padding: "28px 30px" }}>
+            <div style={{ fontSize: 12, letterSpacing: 3, color: C.amber, fontWeight: 700 }}>SIMULADOR · GEOMETRÍA</div>
+            <h1 style={{ margin: "6px 0 2px", fontSize: 26, fontWeight: 800, lineHeight: 1.15 }}>Razones Trigonométricas</h1>
+            <div style={{ fontSize: 14, opacity: 0.85 }}>Seno, coseno y tangente</div>
+            <div style={{ fontSize: 11.5, opacity: 0.6, marginTop: 14 }}>I.E. Técnica Agropecuaria de Luruaco</div>
+          </div>
+          <div style={{ padding: 30 }}>
+            <label style={lbl}>Nombre del estudiante</label>
+            <input style={inp} value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombres y apellidos" />
+            <label style={lbl}>Curso</label>
+            <input style={inp} value={curso} onChange={(e) => setCurso(e.target.value)} placeholder="Ej: 10-A" />
+            <button onClick={iniciar} disabled={!listo}
+              style={{ ...btn, width: "100%", marginTop: 22, opacity: listo ? 1 : 0.45, cursor: listo ? "pointer" : "not-allowed" }}>
+              Continuar
+            </button>
+            <p style={{ fontSize: 12, color: C.muted, marginTop: 16, lineHeight: 1.5 }}>
+              En el siguiente paso eliges el nivel que quieres practicar.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ---- Selección de nivel ----
+  if (fase === "nivel") {
+    return (
+      <div style={{ ...wrap, fontFamily: ff }}>
+        <div style={{ ...card, maxWidth: 560, margin: "0 auto" }}>
+          <div style={{ fontSize: 12, letterSpacing: 2, color: C.amber, fontWeight: 700 }}>PASO 2</div>
+          <h2 style={{ margin: "4px 0 4px", color: C.ink, fontSize: 22 }}>Elige tu nivel</h2>
+          <p style={{ color: C.muted, fontSize: 13, marginTop: 0, marginBottom: 20 }}>{nombre} · Curso {curso}</p>
+          <div style={{ display: "grid", gap: 12 }}>
+            {NIVELES.map((nv) => (
+              <button key={nv.id} onClick={() => elegirNivel(nv)}
+                style={{ textAlign: "left", background: "#fff", border: `1.5px solid ${C.line}`, borderRadius: 14,
+                  padding: "16px 18px", cursor: "pointer" }}>
+                <div style={{ fontWeight: 800, color: C.ink, fontSize: 16 }}>{nv.id}</div>
+                <div style={{ color: C.muted, fontSize: 13, marginTop: 4 }}>{nv.desc}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ---- Resultados ----
+  if (fase === "resultados") {
+    const r = resultado.pct;
+    const radio = 70;
+    const circ = 2 * Math.PI * radio;
+    const color = r >= 70 ? C.good : r >= 40 ? C.amber : C.bad;
+    return (
+      <div style={{ ...wrap, fontFamily: ff }}>
+        <div style={{ ...card, maxWidth: 720, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", paddingBottom: 8 }}>
+            <div style={{ fontSize: 12, letterSpacing: 2, color: C.amber, fontWeight: 700 }}>RESULTADOS</div>
+            <h2 style={{ margin: "4px 0 0", color: C.ink, fontSize: 22 }}>{nombre}</h2>
+            <div style={{ color: C.muted, fontSize: 13 }}>Curso {curso} · Nivel {nivel}</div>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "center", margin: "10px 0 4px" }}>
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <circle cx="90" cy="90" r={radio} fill="none" stroke={C.line} strokeWidth="16" />
+              <circle cx="90" cy="90" r={radio} fill="none" stroke={color} strokeWidth="16" strokeLinecap="round"
+                strokeDasharray={circ} strokeDashoffset={circ - (r / 100) * circ} transform="rotate(-90 90 90)" />
+              <text x="90" y="86" textAnchor="middle" fontSize="40" fontWeight="800" fill={C.ink}>{r}%</text>
+              <text x="90" y="110" textAnchor="middle" fontSize="13" fill={C.muted}>{resultado.correctas} / {total}</text>
+            </svg>
+          </div>
+
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", marginBottom: 18 }}>
+            <Pill label="Correctas" value={resultado.correctas} color={C.good} />
+            <Pill label="Incorrectas" value={resultado.incorrectas} color={C.bad} />
+          </div>
+
+          <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+            <button onClick={enviarSheets} style={{ ...btn }}>
+              {enviado ? "Registrar de nuevo" : "Registrar resultado en Google Sheets"}
+            </button>
+            {!esGuiado && (
+              <button onClick={() => { setFase("examen"); setIdx(0); }} style={{ ...btnGhost }}>Revisar respuestas</button>
+            )}
+          </div>
+          {enviado && (
+            <p style={{ textAlign: "center", color: C.good, fontSize: 12.5, marginTop: 12 }}>
+              Se abrió una pestaña para enviar los datos. Si no se registró, verifica que la URL del script esté
+              desplegada como aplicación web (termina en /exec).
+            </p>
+          )}
+
+          <hr style={{ border: "none", borderTop: `1px solid ${C.line}`, margin: "22px 0 6px" }} />
+          <h3 style={{ color: C.ink, fontSize: 16, margin: "8px 0 12px" }}>{esGuiado ? "Resumen por problema" : "Revisión"}</h3>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {esGuiado
+              ? PROBLEMAS_ESPECIAL.map((p, i) => {
+                  const ok = respGuiado[i].every((r, j) => r === p.pasos[j].correcta);
+                  const sinResponder = respGuiado[i].every((r) => r === null);
+                  return (
+                    <div key={i} title={`Problema ${p.n}`}
+                      style={{ width: 38, height: 38, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center",
+                        fontWeight: 700, color: "#fff", background: sinResponder ? C.muted : ok ? C.good : C.bad }}>
+                      {p.n}
+                    </div>
+                  );
+                })
+              : PREGUNTAS.map((q, i) => {
+                  const ok = respuestas[i] === q.correcta;
+                  const sin = respuestas[i] === null;
+                  return (
+                    <button key={i} onClick={() => { setFase("examen"); setIdx(i); }} title={`Pregunta ${q.n}`}
+                      style={{ width: 38, height: 38, borderRadius: 9, border: "none", cursor: "pointer",
+                        fontWeight: 700, color: "#fff", background: sin ? C.muted : ok ? C.good : C.bad }}>
+                      {q.n}
+                    </button>
+                  );
+                })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ---- Examen guiado (Especial · NEE) ----
+  if (fase === "guiado") {
+    const prob = PROBLEMAS_ESPECIAL[probIdx];
+    const paso = prob.pasos[pasoIdx];
+    const seleccion = respGuiado[probIdx][pasoIdx];
+    const respondido = seleccion !== null;
+    const esUltimoPaso = pasoIdx === 2;
+    const esUltimoProblema = probIdx === PROBLEMAS_ESPECIAL.length - 1;
+
+    const siguiente = () => {
+      if (!esUltimoPaso) { setPasoIdx(pasoIdx + 1); return; }
+      if (!esUltimoProblema) { setProbIdx(probIdx + 1); setPasoIdx(0); return; }
+      setFase("resultados");
+    };
+
+    return (
+      <div style={{ ...wrap, fontFamily: ff }}>
+        <div style={{ ...card, maxWidth: 640, margin: "0 auto" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <div style={{ fontWeight: 800, color: C.ink, fontSize: 15 }}>Nivel Especial · Aprendizaje guiado</div>
+            <div style={{ fontSize: 13, color: C.muted }}>Problema {probIdx + 1} / {PROBLEMAS_ESPECIAL.length}</div>
+          </div>
+          <div style={{ height: 8, background: C.line, borderRadius: 99, margin: "10px 0 4px" }}>
+            <div style={{ width: `${((probIdx + pasoIdx / 3 + 1 / 3) / PROBLEMAS_ESPECIAL.length) * 100}%`, height: "100%", background: C.amber, borderRadius: 99, transition: "width .25s" }} />
+          </div>
+          <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 12 }}>Paso {pasoIdx + 1} de 3</div>
+
+          <div style={{ background: "#fdf2e3", border: `1px solid ${C.amber}`, borderRadius: 10, padding: "8px 12px", fontSize: 12.5, color: C.inkSoft, marginBottom: 14 }}>
+            Recuerda: en este triángulo, sin θ ≈ 0.6 y cos θ ≈ 0.8
+          </div>
+
+          <div style={{ margin: "6px 0 14px", padding: 12, background: C.paper, borderRadius: 12, display: "flex", justifyContent: "center" }}>
+            <Triangulo orient="A" adj={prob.adj} op={prob.op} hip={prob.hip} />
+          </div>
+
+          <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+            <span style={{ background: C.ink, color: "#fff", borderRadius: 8, padding: "3px 10px", fontWeight: 700, fontSize: 13, height: "fit-content" }}>{pasoIdx + 1}</span>
+            <p style={{ margin: 0, color: C.inkSoft, fontSize: 15.5, lineHeight: 1.55 }}>{paso.enunciado}</p>
+          </div>
+
+          <div style={{ display: "grid", gap: 10 }}>
+            {paso.opciones.map((op, i) => {
+              const letra = ["A", "B", "C"][i];
+              const elegida = seleccion === i;
+              const esCorrecta = i === paso.correcta;
+              let bg = C.card, bd = C.line;
+              if (respondido) {
+                if (esCorrecta) { bg = "#eaf6ef"; bd = C.good; }
+                else if (elegida) { bg = "#fbece9"; bd = C.bad; }
+              }
+              return (
+                <button key={i} onClick={() => !respondido && elegirGuiado(i)}
+                  style={{ textAlign: "left", display: "flex", gap: 12, alignItems: "flex-start", padding: "12px 14px",
+                    borderRadius: 12, border: `2px solid ${bd}`, background: bg, cursor: respondido ? "default" : "pointer",
+                    fontSize: 14.5, color: C.inkSoft }}>
+                  <span style={{ fontWeight: 800, color: elegida || (respondido && esCorrecta) ? C.ink : C.muted, minWidth: 16 }}>{letra}</span>
+                  <span style={{ flex: 1 }}>{op}</span>
+                  {respondido && esCorrecta && <span style={{ color: C.good, fontWeight: 800 }}>✓</span>}
+                  {respondido && elegida && !esCorrecta && <span style={{ color: C.bad, fontWeight: 800 }}>✗</span>}
+                </button>
+              );
+            })}
+          </div>
+
+          {respondido && (
+            <p style={{ fontSize: 13, color: seleccion === paso.correcta ? C.good : C.bad, marginTop: 14, fontWeight: 700 }}>
+              {seleccion === paso.correcta ? "¡Muy bien! Es correcto." : "No es correcto, la respuesta correcta está en verde. Sigamos."}
+            </p>
+          )}
+
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 18 }}>
+            <button onClick={siguiente} disabled={!respondido}
+              style={{ ...btn, opacity: respondido ? 1 : 0.45, cursor: respondido ? "pointer" : "not-allowed" }}>
+              {esUltimoPaso && esUltimoProblema ? "Finalizar y ver resultados" : esUltimoPaso ? "Siguiente problema →" : "Siguiente paso →"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ---- Examen (Fácil / Intermedio / Avanzado) ----
+  const p = PREGUNTAS[idx];
+  const seleccion = respuestas[idx];
+  const revisando = contestadas === total || enviado;
+  return (
+    <div style={{ ...wrap, fontFamily: ff }}>
+      <div style={{ ...card, maxWidth: 760, margin: "0 auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <div style={{ fontWeight: 800, color: C.ink, fontSize: 15 }}>Razones Trigonométricas · Nivel {nivel}</div>
+          <div style={{ fontSize: 13, color: C.muted }}>{idx + 1} <span style={{ opacity: 0.6 }}>/ {total}</span></div>
+        </div>
+        <div style={{ height: 8, background: C.line, borderRadius: 99, margin: "10px 0 4px" }}>
+          <div style={{ width: `${((idx + 1) / total) * 100}%`, height: "100%", background: C.amber, borderRadius: 99, transition: "width .25s" }} />
+        </div>
+        <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 18 }}>{contestadas} de {total} respondidas</div>
+
+        <div style={{ display: "flex", gap: 10, marginBottom: 6 }}>
+          <span style={{ background: C.ink, color: "#fff", borderRadius: 8, padding: "3px 10px", fontWeight: 700, fontSize: 13, height: "fit-content" }}>{p.n}</span>
+          <p style={{ margin: 0, color: C.inkSoft, fontSize: 15.5, lineHeight: 1.55 }}>{p.enunciado}</p>
+        </div>
+
+        {p.figura && (
+          <div style={{ margin: "14px 0", padding: 12, background: C.paper, borderRadius: 12, display: "flex", justifyContent: "center" }}>
+            {p.figura}
+          </div>
+        )}
+
+        <div style={{ display: "grid", gap: 10, marginTop: 12 }}>
+          {p.opciones.map((op, i) => {
+            const letra = ["A", "B", "C", "D"][i];
+            const elegida = seleccion === i;
+            const esCorrecta = i === p.correcta;
+            let bg = C.card, bd = C.line;
+            if (revisando) {
+              if (esCorrecta) { bg = "#eaf6ef"; bd = C.good; }
+              else if (elegida) { bg = "#fbece9"; bd = C.bad; }
+            } else if (elegida) { bg = "#fdf2e3"; bd = C.amber; }
+            return (
+              <button key={i} onClick={() => !revisando && elegir(i)}
+                style={{ textAlign: "left", display: "flex", gap: 12, alignItems: "flex-start", padding: "12px 14px",
+                  borderRadius: 12, border: `2px solid ${bd}`, background: bg, cursor: revisando ? "default" : "pointer",
+                  fontSize: 14.5, color: C.inkSoft }}>
+                <span style={{ fontWeight: 800, color: elegida || (revisando && esCorrecta) ? C.ink : C.muted, minWidth: 16 }}>{letra}</span>
+                <span style={{ flex: 1 }}>{op}</span>
+                {revisando && esCorrecta && <span style={{ color: C.good, fontWeight: 800 }}>✓</span>}
+                {revisando && elegida && !esCorrecta && <span style={{ color: C.bad, fontWeight: 800 }}>✗</span>}
+              </button>
+            );
+          })}
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, gap: 10 }}>
+          <button onClick={() => setIdx((v) => Math.max(0, v - 1))} disabled={idx === 0} style={{ ...btnGhost, opacity: idx === 0 ? 0.4 : 1 }}>← Anterior</button>
+          {idx < total - 1 ? (
+            <button onClick={() => setIdx((v) => Math.min(total - 1, v + 1))} style={{ ...btn }}>Siguiente →</button>
+          ) : (
+            <button onClick={() => setFase("resultados")} style={{ ...btn, background: C.good }}>Finalizar y ver resultados</button>
+          )}
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 20 }}>
+          {PREGUNTAS.map((q, i) => (
+            <button key={i} onClick={() => setIdx(i)}
+              style={{ width: 30, height: 30, borderRadius: 7, fontSize: 12, fontWeight: 700, cursor: "pointer",
+                border: i === idx ? `2px solid ${C.ink}` : `1px solid ${C.line}`,
+                background: respuestas[i] !== null ? C.amber : C.card,
+                color: respuestas[i] !== null ? "#fff" : C.muted }}>
+              {q.n}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Pill({ label, value, color }) {
+  return (
+    <div style={{ background: "#fff", border: `1px solid ${C.line}`, borderRadius: 12, padding: "10px 18px", textAlign: "center", minWidth: 92 }}>
+      <div style={{ fontSize: 24, fontWeight: 800, color }}>{value}</div>
+      <div style={{ fontSize: 11.5, color: C.muted }}>{label}</div>
+    </div>
+  );
+}
+
+const wrap = { minHeight: "100vh", background: C.paper, padding: "28px 16px", boxSizing: "border-box" };
+const card = { background: C.card, borderRadius: 18, padding: 26, boxShadow: "0 8px 30px rgba(15,42,63,.08)", border: `1px solid ${C.line}` };
+const lbl = { display: "block", fontSize: 12.5, fontWeight: 700, color: C.ink, margin: "14px 0 6px" };
+const inp = { width: "100%", padding: "11px 13px", borderRadius: 10, border: `1.5px solid ${C.line}`, fontSize: 15, boxSizing: "border-box", outline: "none" };
+const btn = { background: C.ink, color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14.5, fontWeight: 700, cursor: "pointer" };
+const btnGhost = { background: "#fff", color: C.ink, border: `1.5px solid ${C.line}`, borderRadius: 10, padding: "11px 20px", fontSize: 14.5, fontWeight: 700, cursor: "pointer" };
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>
