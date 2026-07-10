@@ -321,6 +321,15 @@ const PROBLEMAS_ESPECIAL = [
     ] },
 ];
 
+// Ayuda contextual del nivel Especial, según el paso (0: identificar lado, 1: elegir razón, 2: calcular)
+const AYUDA_PASO = [
+  "La hipotenusa es el lado más largo y siempre está opuesta al ángulo recto (el cuadradito). El opuesto está enfrente del ángulo θ. El adyacente está pegado al ángulo θ, sin ser la hipotenusa.",
+  "Recuerda SOH-CAH-TOA: Seno = opuesto ÷ hipotenusa · Coseno = adyacente ÷ hipotenusa · Tangente = opuesto ÷ adyacente.",
+  "En este triángulo: sin θ ≈ 0.6 y cos θ ≈ 0.8.",
+];
+
+const CURSOS = ["1001", "1002", "1003", "1101", "1102", "1103"];
+
 const NIVELES = [
   { id: "Fácil", desc: "15 preguntas · Conceptos básicos: identificar lados y calcular razones", preguntas: PREGUNTAS_FACIL },
   { id: "Intermedio", desc: "15 preguntas · Cálculos con decimales y problemas de aplicación", preguntas: PREGUNTAS_INTERMEDIO },
@@ -444,7 +453,12 @@ function App() {
             <label style={lbl}>Nombre del estudiante</label>
             <input style={inp} value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombres y apellidos" />
             <label style={lbl}>Curso</label>
-            <input style={inp} value={curso} onChange={(e) => setCurso(e.target.value)} placeholder="Ej: 10-A" />
+            <select style={inp} value={curso} onChange={(e) => setCurso(e.target.value)}>
+              <option value="">Selecciona tu curso</option>
+              {CURSOS.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
             <button onClick={iniciar} disabled={!listo}
               style={{ ...btn, width: "100%", marginTop: 22, opacity: listo ? 1 : 0.45, cursor: listo ? "pointer" : "not-allowed" }}>
               Continuar
@@ -586,7 +600,7 @@ function App() {
           <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 12 }}>Paso {pasoIdx + 1} de 3</div>
 
           <div style={{ background: "#fdf2e3", border: `1px solid ${C.amber}`, borderRadius: 10, padding: "8px 12px", fontSize: 12.5, color: C.inkSoft, marginBottom: 14 }}>
-            Recuerda: en este triángulo, sin θ ≈ 0.6 y cos θ ≈ 0.8
+            💡 {AYUDA_PASO[pasoIdx]}
           </div>
 
           <div style={{ margin: "6px 0 14px", padding: 12, background: C.paper, borderRadius: 12, display: "flex", justifyContent: "center" }}>
