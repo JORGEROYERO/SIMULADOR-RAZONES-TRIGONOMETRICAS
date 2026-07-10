@@ -98,49 +98,49 @@ function Triangulo({ orient = "A", adj, op, hip, angleLabel = "θ" }) {
 const PREGUNTAS_FACIL = [
   { n: 1, enunciado: "Observa el triángulo. ¿Qué letra representa el lado OPUESTO al ángulo θ?",
     figura: <Triangulo orient="A" adj="m" op="n" hip="p" />,
-    opciones: ["m", "n", "p", "No se puede determinar"], correcta: 1 },
+    opciones: ["m", "n", "p", "No se puede determinar"], correcta: 1, explicacion: "El lado opuesto es el que está enfrente del ángulo θ, sin tocarlo. En este triángulo ese lado es n." },
   { n: 2, enunciado: "¿Cuál letra representa la HIPOTENUSA de este triángulo?",
     figura: <Triangulo orient="B" adj="x" op="y" hip="z" />,
-    opciones: ["x", "y", "z", "Ninguna de las anteriores"], correcta: 2 },
+    opciones: ["x", "y", "z", "Ninguna de las anteriores"], correcta: 2, explicacion: "La hipotenusa es siempre el lado más largo, opuesto al ángulo recto (el cuadradito), nunca al ángulo θ." },
   { n: 3, enunciado: "¿Qué letra corresponde al lado ADYACENTE al ángulo θ?",
     figura: <Triangulo orient="C" adj="a" op="b" hip="c" />,
-    opciones: ["a", "b", "c", "No se puede determinar"], correcta: 0 },
+    opciones: ["a", "b", "c", "No se puede determinar"], correcta: 0, explicacion: "El lado adyacente está pegado al ángulo θ (lo toca), y no es la hipotenusa." },
   { n: 4, enunciado: "¿Cuál es el lado OPUESTO al ángulo θ en este triángulo?",
     figura: <Triangulo orient="A" adj="p" op="q" hip="r" />,
-    opciones: ["p", "q", "r", "Depende del valor de θ"], correcta: 1 },
+    opciones: ["p", "q", "r", "Depende del valor de θ"], correcta: 1, explicacion: "El lado opuesto está enfrente del ángulo θ; el adyacente es el que sí toca al ángulo θ." },
   { n: 5, enunciado: "En cualquier triángulo rectángulo, la hipotenusa siempre es el lado que está...",
     figura: <Triangulo orient="B" adj="d" op="e" hip="f" />,
-    opciones: ["Opuesto al ángulo recto (el lado más largo)", "Adyacente al ángulo θ", "Opuesto al ángulo θ", "Igual a la suma de los catetos"], correcta: 0 },
+    opciones: ["Opuesto al ángulo recto (el lado más largo)", "Adyacente al ángulo θ", "Opuesto al ángulo θ", "Igual a la suma de los catetos"], correcta: 0, explicacion: "La hipotenusa se define por su relación con el ángulo recto (90°), no con el ángulo θ; por eso no cambia aunque cambie θ." },
   { n: 6, enunciado: "El triángulo tiene catetos 4 (adyacente) y 3 (opuesto), con hipotenusa 5. Calcula sin θ.",
     figura: <Triangulo orient="A" adj="4" op="3" hip="5" />,
-    opciones: ["3/5", "4/5", "3/4", "4/3"], correcta: 0 },
+    opciones: ["3/5", "4/5", "3/4", "4/3"], correcta: 0, explicacion: "sin θ = opuesto/hipotenusa = 3/5. Si marcaste otra opción, probablemente usaste el cateto adyacente en el numerador." },
   { n: 7, enunciado: "El triángulo tiene catetos 8 (adyacente) y 6 (opuesto), con hipotenusa 10. Calcula cos θ.",
     figura: <Triangulo orient="B" adj="8" op="6" hip="10" />,
-    opciones: ["3/5", "4/5", "3/4", "5/4"], correcta: 1 },
+    opciones: ["3/5", "4/5", "3/4", "5/4"], correcta: 1, explicacion: "cos θ = adyacente/hipotenusa = 8/10 = 4/5. El adyacente (8) va en el numerador, no el opuesto (6)." },
   { n: 8, enunciado: "El triángulo tiene catetos 12 (adyacente) y 5 (opuesto), con hipotenusa 13. Calcula tan θ.",
     figura: <Triangulo orient="C" adj="12" op="5" hip="13" />,
-    opciones: ["5/12", "12/5", "5/13", "12/13"], correcta: 0 },
+    opciones: ["5/12", "12/5", "5/13", "12/13"], correcta: 0, explicacion: "tan θ = opuesto/adyacente = 5/12. Cuidado con invertir la fracción: la tangente no lleva la hipotenusa." },
   { n: 9, enunciado: "El triángulo tiene catetos 12 (adyacente) y 9 (opuesto), con hipotenusa 15. Calcula sin θ como decimal.",
     figura: <Triangulo orient="A" adj="12" op="9" hip="15" />,
-    opciones: ["0.6", "0.8", "0.75", "1.33"], correcta: 0 },
+    opciones: ["0.6", "0.8", "0.75", "1.33"], correcta: 0, explicacion: "sin θ = opuesto/hipotenusa = 9/15 = 0.6. Si te dio 0.8, probablemente calculaste el coseno en su lugar." },
   { n: 10, enunciado: "El triángulo tiene catetos 15 (adyacente) y 8 (opuesto), con hipotenusa 17. Calcula tan θ (dos decimales).",
     figura: <Triangulo orient="B" adj="15" op="8" hip="17" />,
-    opciones: ["0.53", "0.47", "1.88", "0.88"], correcta: 0 },
+    opciones: ["0.53", "0.47", "1.88", "0.88"], correcta: 0, explicacion: "tan θ = opuesto/adyacente = 8/15 ≈ 0.53. Verifica que dividiste opuesto entre adyacente y no al revés." },
   { n: 11, enunciado: "La hipotenusa mide 10 y el ángulo marcado es 30°. Usa sin 30° = 0.5 para hallar el lado opuesto (?).",
     figura: <Triangulo orient="A" adj="?" op="?" hip="10" angleLabel="30°" />,
-    opciones: ["5", "8.66", "5.77", "10"], correcta: 0 },
+    opciones: ["5", "8.66", "5.77", "10"], correcta: 0, explicacion: "opuesto = hipotenusa × sin θ = 10 × 0.5 = 5. Si multiplicaste por otro valor, revisa que usaste sin 30° = 0.5." },
   { n: 12, enunciado: "El lado adyacente mide 12 y el ángulo es 45°. Usa tan 45° = 1 para hallar el lado opuesto (?).",
     figura: <Triangulo orient="A" adj="12" op="?" hip="?" angleLabel="45°" />,
-    opciones: ["12", "6", "24", "8.49"], correcta: 0 },
+    opciones: ["12", "6", "24", "8.49"], correcta: 0, explicacion: "Con tan 45° = 1, el opuesto es igual al adyacente: 12 × 1 = 12." },
   { n: 13, enunciado: "La hipotenusa mide 20 y el ángulo es 60°. Usa cos 60° = 0.5 para hallar el lado adyacente (?).",
     figura: <Triangulo orient="B" adj="?" op="?" hip="20" angleLabel="60°" />,
-    opciones: ["10", "17.32", "20", "5"], correcta: 0 },
+    opciones: ["10", "17.32", "20", "5"], correcta: 0, explicacion: "adyacente = hipotenusa × cos θ = 20 × 0.5 = 10. Cuidado con usar sin en vez de cos." },
   { n: 14, enunciado: "El lado opuesto mide 9 y el ángulo es 30°. Usa sin 30° = 0.5 para hallar la hipotenusa (?).",
     figura: <Triangulo orient="A" adj="?" op="9" hip="?" angleLabel="30°" />,
-    opciones: ["18", "4.5", "9", "15.59"], correcta: 0 },
+    opciones: ["18", "4.5", "9", "15.59"], correcta: 0, explicacion: "hipotenusa = opuesto ÷ sin θ = 9 ÷ 0.5 = 18. Aquí se divide, no se multiplica, porque despejamos la hipotenusa." },
   { n: 15, enunciado: "El lado adyacente mide 5 y el ángulo es 60°. Usa tan 60° = 1.73 para hallar el lado opuesto (?).",
     figura: <Triangulo orient="A" adj="5" op="?" hip="?" angleLabel="60°" />,
-    opciones: ["8.65", "2.89", "10", "5.77"], correcta: 0 },
+    opciones: ["8.65", "2.89", "10", "5.77"], correcta: 0, explicacion: "opuesto = adyacente × tan θ = 5 × 1.73 = 8.65. Revisa que multiplicaste por tan 60°, no por sin o cos." },
 ];
 
 // ============================================================
@@ -149,41 +149,41 @@ const PREGUNTAS_FACIL = [
 const PREGUNTAS_INTERMEDIO = [
   { n: 1, enunciado: "En el triángulo, θ es el ángulo marcado. Si en vez de θ tomamos el OTRO ángulo agudo β (vértice superior), ¿qué lado sería ahora el opuesto a β?",
     figura: <Triangulo orient="A" adj="m" op="n" hip="p" />,
-    opciones: ["m", "n", "p", "Sigue siendo n"], correcta: 0 },
+    opciones: ["m", "n", "p", "Sigue siendo n"], correcta: 0, explicacion: "Al cambiar el ángulo de referencia, lo que era adyacente a θ pasa a ser opuesto a β (los catetos intercambian su papel)." },
   { n: 2, enunciado: "Tomando el otro ángulo agudo β en lugar de θ, ¿cuál lado sería el ADYACENTE a β?",
     figura: <Triangulo orient="B" adj="x" op="y" hip="z" />,
-    opciones: ["z", "x", "y", "No cambia"], correcta: 2 },
+    opciones: ["z", "x", "y", "No cambia"], correcta: 2, explicacion: "El lado que era opuesto a θ pasa a ser adyacente a β; solo la hipotenusa se mantiene igual para ambos ángulos." },
   { n: 3, enunciado: "¿Cambia la hipotenusa si en lugar de θ consideramos el otro ángulo agudo β?",
     figura: <Triangulo orient="C" adj="a" op="b" hip="c" />,
-    opciones: ["No, la hipotenusa es la misma para ambos ángulos agudos", "Sí, se convierte en el lado a", "Sí, se convierte en el lado b", "No se puede saber"], correcta: 0 },
+    opciones: ["No, la hipotenusa es la misma para ambos ángulos agudos", "Sí, se convierte en el lado a", "Sí, se convierte en el lado b", "No se puede saber"], correcta: 0, explicacion: "La hipotenusa no depende de cuál ángulo agudo tomes como referencia; siempre es el lado más largo, frente al ángulo recto." },
   { n: 4, enunciado: "En un triángulo rectángulo el ángulo θ mide 40°. ¿Cuánto mide el otro ángulo agudo β?",
-    opciones: ["50°", "60°", "140°", "90°"], correcta: 0 },
+    opciones: ["50°", "60°", "140°", "90°"], correcta: 0, explicacion: "Los dos ángulos agudos de un triángulo rectángulo siempre suman 90°: 90° − 40° = 50°." },
   { n: 5, enunciado: "Si θ y β son los dos ángulos agudos de un triángulo rectángulo, ¿qué relación existe entre sin θ y cos β?",
-    opciones: ["sin θ = cos β", "sin θ = sin β", "cos θ = cos β", "tan θ = tan β"], correcta: 0 },
+    opciones: ["sin θ = cos β", "sin θ = sin β", "cos θ = cos β", "tan θ = tan β"], correcta: 0, explicacion: "Es la identidad de cofunciones: el seno de un ángulo agudo siempre es igual al coseno del otro ángulo agudo del mismo triángulo." },
   { n: 6, enunciado: "Triángulo con catetos 24 (adyacente) y 7 (opuesto), hipotenusa 25. Calcula sin θ (dos decimales).",
     figura: <Triangulo orient="A" adj="24" op="7" hip="25" />,
-    opciones: ["0.28", "0.96", "0.29", "0.72"], correcta: 0 },
+    opciones: ["0.28", "0.96", "0.29", "0.72"], correcta: 0, explicacion: "sin θ = opuesto/hipotenusa = 7/25 = 0.28. Si te dio 0.96, calculaste el coseno." },
   { n: 7, enunciado: "Triángulo con catetos 20 (adyacente) y 21 (opuesto), hipotenusa 29. Calcula cos θ (dos decimales).",
     figura: <Triangulo orient="B" adj="20" op="21" hip="29" />,
-    opciones: ["0.69", "0.72", "0.97", "0.31"], correcta: 0 },
+    opciones: ["0.69", "0.72", "0.97", "0.31"], correcta: 0, explicacion: "cos θ = adyacente/hipotenusa = 20/29 ≈ 0.69. Verifica que el adyacente (20) esté en el numerador." },
   { n: 8, enunciado: "Triángulo con catetos 40 (adyacente) y 9 (opuesto), hipotenusa 41. Calcula tan θ (dos decimales).",
     figura: <Triangulo orient="C" adj="40" op="9" hip="41" />,
-    opciones: ["0.23", "4.44", "0.22", "0.9"], correcta: 0 },
+    opciones: ["0.23", "4.44", "0.22", "0.9"], correcta: 0, explicacion: "tan θ = opuesto/adyacente = 9/40 = 0.225, que redondea a 0.23." },
   { n: 9, enunciado: "Si sin θ = 0.6, ¿cuánto vale cos θ? (Usa sin²θ + cos²θ = 1)",
-    opciones: ["0.8", "0.4", "0.64", "1.6"], correcta: 0 },
+    opciones: ["0.8", "0.4", "0.64", "1.6"], correcta: 0, explicacion: "Con la identidad sin²θ + cos²θ = 1: cos θ = √(1 − 0.36) = √0.64 = 0.8." },
   { n: 10, enunciado: "Triángulo con catetos 5 (adyacente) y 12 (opuesto), hipotenusa 13. Calcula sin θ (dos decimales).",
     figura: <Triangulo orient="A" adj="5" op="12" hip="13" />,
-    opciones: ["0.92", "0.38", "2.4", "0.42"], correcta: 0 },
+    opciones: ["0.92", "0.38", "2.4", "0.42"], correcta: 0, explicacion: "sin θ = opuesto/hipotenusa = 12/13 ≈ 0.92. El opuesto (12) va en el numerador, no el adyacente (5)." },
   { n: 11, enunciado: "Una rampa forma un ángulo de 30° con el suelo. Si la rampa (hipotenusa) mide 8 metros, ¿cuál es la altura que alcanza (lado opuesto)? Usa sin 30° = 0.5.",
-    opciones: ["4 m", "6.93 m", "8 m", "2 m"], correcta: 0 },
+    opciones: ["4 m", "6.93 m", "8 m", "2 m"], correcta: 0, explicacion: "opuesto = hipotenusa × sin θ = 8 × 0.5 = 4 m. La rampa completa es la hipotenusa (mide 8 m)." },
   { n: 12, enunciado: "Un cable de una antena forma un ángulo de 60° con el suelo y está anclado a 5 metros de la base (adyacente). ¿Cuál es la altura de la antena (opuesto)? Usa tan 60° ≈ 1.73.",
-    opciones: ["8.65 m", "2.89 m", "10 m", "5.77 m"], correcta: 0 },
+    opciones: ["8.65 m", "2.89 m", "10 m", "5.77 m"], correcta: 0, explicacion: "opuesto = adyacente × tan θ = 5 × 1.73 = 8.65 m. Se usa tangente porque los dos datos conocidos son catetos, no la hipotenusa." },
   { n: 13, enunciado: "Una escalera de 6 metros (hipotenusa) se apoya contra una pared formando un ángulo de 45° con el suelo. ¿A qué altura llega? Usa sin 45° ≈ 0.71.",
-    opciones: ["4.26 m", "8.45 m", "3 m", "6 m"], correcta: 0 },
+    opciones: ["4.26 m", "8.45 m", "3 m", "6 m"], correcta: 0, explicacion: "opuesto = hipotenusa × sin θ = 6 × 0.71 = 4.26 m. La escalera completa es la hipotenusa." },
   { n: 14, enunciado: "El ángulo de elevación hasta la punta de un árbol es 30°, desde un punto a 15 metros de la base (adyacente). ¿Qué altura tiene el árbol (opuesto)? Usa tan 30° ≈ 0.58.",
-    opciones: ["8.7 m", "25.86 m", "7.5 m", "17.32 m"], correcta: 0 },
+    opciones: ["8.7 m", "25.86 m", "7.5 m", "17.32 m"], correcta: 0, explicacion: "opuesto = adyacente × tan θ = 15 × 0.58 = 8.7 m." },
   { n: 15, enunciado: "Calcula el lado adyacente si el ángulo es 60° y la hipotenusa mide 14 m. Usa cos 60° = 0.5.",
-    opciones: ["7 m", "12.12 m", "14 m", "3.5 m"], correcta: 0 },
+    opciones: ["7 m", "12.12 m", "14 m", "3.5 m"], correcta: 0, explicacion: "adyacente = hipotenusa × cos θ = 14 × 0.5 = 7 m." },
 ];
 
 // ============================================================
@@ -191,141 +191,142 @@ const PREGUNTAS_INTERMEDIO = [
 // ============================================================
 const PREGUNTAS_AVANZADO = [
   { n: 1, enunciado: "Si duplicas la longitud de todos los lados de un triángulo rectángulo (conservando sus ángulos), ¿qué sucede con el valor de sin θ?",
-    opciones: ["No cambia, sigue siendo el mismo valor", "Se duplica", "Se reduce a la mitad", "Se eleva al cuadrado"], correcta: 0 },
+    opciones: ["No cambia, sigue siendo el mismo valor", "Se duplica", "Se reduce a la mitad", "Se eleva al cuadrado"], correcta: 0, explicacion: "Las razones trigonométricas dependen solo de los ángulos, no del tamaño del triángulo; por eso escalar los lados no cambia sin θ." },
   { n: 2, enunciado: "En un triángulo rectángulo, si el ángulo θ se acerca a 90°, ¿qué le sucede al valor de tan θ?",
-    opciones: ["Crece indefinidamente (tiende a infinito)", "Se acerca a 0", "Se mantiene en 1", "Se vuelve negativo"], correcta: 0 },
+    opciones: ["Crece indefinidamente (tiende a infinito)", "Se acerca a 0", "Se mantiene en 1", "Se vuelve negativo"], correcta: 0, explicacion: "Cuando θ se acerca a 90°, el cateto adyacente se acerca a 0, y como tan θ = opuesto/adyacente, dividir entre un número cada vez más pequeño hace crecer el resultado sin límite." },
   { n: 3, enunciado: "¿Cuánto vale sin θ + cos θ cuando θ = 45°? Usa sin 45° = cos 45° ≈ 0.71.",
-    opciones: ["1.42", "1", "0.71", "2"], correcta: 0 },
+    opciones: ["1.42", "1", "0.71", "2"], correcta: 0, explicacion: "sin 45° + cos 45° = 0.71 + 0.71 = 1.42." },
   { n: 4, enunciado: "Si tan θ = 1, ¿cuánto mide el ángulo θ?",
-    opciones: ["45°", "30°", "60°", "90°"], correcta: 0 },
+    opciones: ["45°", "30°", "60°", "90°"], correcta: 0, explicacion: "tan θ = 1 cuando opuesto = adyacente, lo cual ocurre en θ = 45°." },
   { n: 5, enunciado: "En un triángulo rectángulo isósceles (los dos catetos son iguales), ¿cuánto miden los ángulos agudos?",
-    opciones: ["45° cada uno", "30° y 60°", "60° cada uno", "Uno de 90°"], correcta: 0 },
+    opciones: ["45° cada uno", "30° y 60°", "60° cada uno", "Uno de 90°"], correcta: 0, explicacion: "Si los catetos son iguales, los ángulos agudos también son iguales, y como suman 90°, cada uno mide 45°." },
   { n: 6, enunciado: "Si cos θ = 0.28, ¿cuánto vale sin θ? Usa sin²θ + cos²θ = 1.",
-    opciones: ["0.96", "0.72", "0.28", "1.28"], correcta: 0 },
+    opciones: ["0.96", "0.72", "0.28", "1.28"], correcta: 0, explicacion: "Con sin²θ + cos²θ = 1: sin θ = √(1 − 0.28²) = √0.9216 = 0.96." },
   { n: 7, enunciado: "Si sin θ = 0.8, ¿cuál es el valor de tan θ? (Primero halla cos θ con la identidad pitagórica)",
-    opciones: ["1.33", "0.6", "0.75", "1.6"], correcta: 0 },
+    opciones: ["1.33", "0.6", "0.75", "1.6"], correcta: 0, explicacion: "Primero cos θ = √(1 − 0.8²) = √0.36 = 0.6. Luego tan θ = sin θ ÷ cos θ = 0.8 ÷ 0.6 ≈ 1.33." },
   { n: 8, enunciado: "Triángulo con catetos 21 (adyacente) y 20 (opuesto), hipotenusa 29. Calcula sin θ × cos θ (dos decimales).",
     figura: <Triangulo orient="C" adj="21" op="20" hip="29" />,
-    opciones: ["0.50", "0.69", "0.72", "1.41"], correcta: 0 },
+    opciones: ["0.50", "0.69", "0.72", "1.41"], correcta: 0, explicacion: "sin θ = 20/29 ≈ 0.69, cos θ = 21/29 ≈ 0.72. Su producto es 0.69 × 0.72 ≈ 0.50." },
   { n: 9, enunciado: "Si tan θ = 3/4, ¿cuánto vale sin θ? (Piensa en el triángulo 3-4-5)",
-    opciones: ["0.6", "0.75", "0.8", "1.33"], correcta: 0 },
+    opciones: ["0.6", "0.75", "0.8", "1.33"], correcta: 0, explicacion: "Si tan θ = 3/4, piensa en el triángulo 3-4-5: opuesto=3, adyacente=4, hipotenusa=5, entonces sin θ = 3/5 = 0.6." },
   { n: 10, enunciado: "En un triángulo rectángulo, cos θ = 0.6. Sabiendo que cos 53° ≈ 0.6, ¿cuánto mide θ aproximadamente?",
-    opciones: ["53°", "37°", "60°", "30°"], correcta: 0 },
+    opciones: ["53°", "37°", "60°", "30°"], correcta: 0, explicacion: "cos 53° ≈ 0.6, así que si cos θ = 0.6, entonces θ ≈ 53°." },
   { n: 11, enunciado: "Desde la punta de un faro de 25 m de altura, el ángulo de depresión hacia un barco es de 35°. Usa tan 35° ≈ 0.70 para hallar la distancia horizontal del barco a la base del faro.",
-    opciones: ["35.71 m", "17.5 m", "25 m", "43.86 m"], correcta: 0 },
+    opciones: ["35.71 m", "17.5 m", "25 m", "43.86 m"], correcta: 0, explicacion: "distancia = altura ÷ tan 35° = 25 ÷ 0.70 ≈ 35.71 m. Se divide porque se despeja el adyacente conociendo el opuesto." },
   { n: 12, enunciado: "Un dron vuela a 40 m de altura. El ángulo de elevación desde un observador en el suelo es de 50°. Usa tan 50° ≈ 1.19 para hallar la distancia horizontal al punto bajo el dron.",
-    opciones: ["33.6 m", "47.6 m", "40 m", "21.2 m"], correcta: 0 },
+    opciones: ["33.6 m", "47.6 m", "40 m", "21.2 m"], correcta: 0, explicacion: "distancia = altura ÷ tan 50° = 40 ÷ 1.19 ≈ 33.6 m." },
   { n: 13, enunciado: "Una cometa está sujeta por un hilo de 50 m que forma un ángulo de 65° con el suelo. Usa sin 65° ≈ 0.91 para hallar la altura de la cometa.",
-    opciones: ["45.5 m", "54.9 m", "21.1 m", "50 m"], correcta: 0 },
+    opciones: ["45.5 m", "54.9 m", "21.1 m", "50 m"], correcta: 0, explicacion: "altura = hipotenusa × sin 65° = 50 × 0.91 = 45.5 m. El hilo de la cometa es la hipotenusa." },
   { n: 14, enunciado: "El ángulo de elevación al tope de un edificio desde un punto a 60 m de su base es de 42°. Usa tan 42° ≈ 0.90 para hallar la altura del edificio.",
-    opciones: ["54 m", "66.7 m", "60 m", "27 m"], correcta: 0 },
+    opciones: ["54 m", "66.7 m", "60 m", "27 m"], correcta: 0, explicacion: "altura = distancia × tan 42° = 60 × 0.90 = 54 m." },
   { n: 15, enunciado: "Una persona observa la punta de una torre con un ángulo de elevación de 55° desde un punto a 20 m de la base. Usa tan 55° ≈ 1.43 para hallar la altura de la torre.",
-    opciones: ["28.6 m", "20 m", "14.3 m", "33.4 m"], correcta: 0 },
+    opciones: ["28.6 m", "20 m", "14.3 m", "33.4 m"], correcta: 0, explicacion: "altura = distancia × tan 55° = 20 × 1.43 = 28.6 m." },
 ];
 
 // ============================================================
 //  NIVEL ESPECIAL · APRENDIZAJE GUIADO (10 problemas, 3 pasos c/u)
 //  Pensado para estudiantes con dificultades de aprendizaje:
-//  siempre el mismo triángulo 3-4-5 (escalado), sin θ ≈ 0.6, cos θ ≈ 0.8
+//  siempre el mismo triángulo 3-4-5 (escalado), ángulo θ ≈ 37°,
+//  con sin θ ≈ 0.6 y cos θ ≈ 0.8 dados como dato fijo del problema.
 // ============================================================
 const PROBLEMAS_ESPECIAL = [
-  { n: 1, adj: "?", op: "3", hip: "5", buscar: "adyacente",
+  { n: 1, adj: "?", op: "3", hip: "5", buscar: "adyacente", conocidoLabel: "cateto opuesto", conocidoValor: "3",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo? (mira dónde está el signo ?)",
-        opciones: ["La hipotenusa", "El lado adyacente", "El lado opuesto"], correcta: 1 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
-        opciones: ["Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)"], correcta: 2 },
-      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 5 × 0.8 =",
-        opciones: ["3", "4", "6"], correcta: 1 },
+        opciones: ["La hipotenusa", "El lado adyacente", "El lado opuesto"], correcta: 1, explicacion: "El signo ? está en el lado adyacente; por eso es el que debemos hallar. La hipotenusa (5) y el cateto opuesto (3) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto opuesto. Buscamos el cateto adyacente. ¿Qué razón usamos?",
+        opciones: ["Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)"], correcta: 2, explicacion: "Buscamos el adyacente y conocemos la hipotenusa. La razón que relaciona esos dos lados es el coseno (CAH: adyacente ÷ hipotenusa), no el seno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto ADYACENTE?", formula: ["La razón coseno relaciona el cateto adyacente con la hipotenusa: cos θ = adyacente ÷ hipotenusa.", "Despejando el adyacente: adyacente = hipotenusa × cos θ.", "Con hipotenusa = 5 y cos θ ≈ 0.8: adyacente = 5 × 0.8 ="],
+        opciones: ["3", "4", "6"], correcta: 1, explicacion: "adyacente = hipotenusa × cos θ = 5 × 0.8 = 4. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.8 (coseno), no 0.6 (seno)." },
     ] },
-  { n: 2, adj: "4", op: "?", hip: "5", buscar: "opuesto",
+  { n: 2, adj: "4", op: "?", hip: "5", buscar: "opuesto", conocidoLabel: "cateto adyacente", conocidoValor: "4",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
-        opciones: ["El lado opuesto", "La hipotenusa", "El lado adyacente"], correcta: 0 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
-        opciones: ["Coseno (adyacente/hipotenusa)", "Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)"], correcta: 2 },
-      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 5 × 0.6 =",
-        opciones: ["4", "3", "2"], correcta: 1 },
+        opciones: ["El lado opuesto", "La hipotenusa", "El lado adyacente"], correcta: 0, explicacion: "El signo ? está en el lado opuesto; por eso es el que debemos hallar. La hipotenusa (5) y el cateto adyacente (4) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto adyacente. Buscamos el cateto opuesto. ¿Qué razón usamos?",
+        opciones: ["Coseno (adyacente/hipotenusa)", "Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)"], correcta: 2, explicacion: "Buscamos el opuesto y conocemos la hipotenusa. La razón que relaciona esos dos lados es el seno (SOH: opuesto ÷ hipotenusa), no el coseno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto OPUESTO?", formula: ["La razón seno relaciona el cateto opuesto con la hipotenusa: sin θ = opuesto ÷ hipotenusa.", "Despejando el opuesto: opuesto = hipotenusa × sin θ.", "Con hipotenusa = 5 y sin θ ≈ 0.6: opuesto = 5 × 0.6 ="],
+        opciones: ["4", "3", "2"], correcta: 1, explicacion: "opuesto = hipotenusa × sin θ = 5 × 0.6 = 3. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.6 (seno), no 0.8 (coseno)." },
     ] },
-  { n: 3, adj: "?", op: "6", hip: "10", buscar: "adyacente",
+  { n: 3, adj: "?", op: "6", hip: "10", buscar: "adyacente", conocidoLabel: "cateto opuesto", conocidoValor: "6",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
-        opciones: ["El lado adyacente", "El lado opuesto", "La hipotenusa"], correcta: 0 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
-        opciones: ["Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 1 },
-      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 10 × 0.8 =",
-        opciones: ["8", "10", "6"], correcta: 0 },
+        opciones: ["El lado adyacente", "El lado opuesto", "La hipotenusa"], correcta: 0, explicacion: "El signo ? está en el lado adyacente; por eso es el que debemos hallar. La hipotenusa (10) y el cateto opuesto (6) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto opuesto. Buscamos el cateto adyacente. ¿Qué razón usamos?",
+        opciones: ["Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 1, explicacion: "Buscamos el adyacente y conocemos la hipotenusa. La razón que relaciona esos dos lados es el coseno (CAH: adyacente ÷ hipotenusa), no el seno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto ADYACENTE?", formula: ["La razón coseno relaciona el cateto adyacente con la hipotenusa: cos θ = adyacente ÷ hipotenusa.", "Despejando el adyacente: adyacente = hipotenusa × cos θ.", "Con hipotenusa = 10 y cos θ ≈ 0.8: adyacente = 10 × 0.8 ="],
+        opciones: ["8", "10", "6"], correcta: 0, explicacion: "adyacente = hipotenusa × cos θ = 10 × 0.8 = 8. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.8 (coseno), no 0.6 (seno)." },
     ] },
-  { n: 4, adj: "8", op: "?", hip: "10", buscar: "opuesto",
+  { n: 4, adj: "8", op: "?", hip: "10", buscar: "opuesto", conocidoLabel: "cateto adyacente", conocidoValor: "8",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
-        opciones: ["La hipotenusa", "El lado opuesto", "El lado adyacente"], correcta: 1 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
-        opciones: ["Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)"], correcta: 1 },
-      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 10 × 0.6 =",
-        opciones: ["8", "5", "6"], correcta: 2 },
+        opciones: ["La hipotenusa", "El lado opuesto", "El lado adyacente"], correcta: 1, explicacion: "El signo ? está en el lado opuesto; por eso es el que debemos hallar. La hipotenusa (10) y el cateto adyacente (8) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto adyacente. Buscamos el cateto opuesto. ¿Qué razón usamos?",
+        opciones: ["Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)"], correcta: 1, explicacion: "Buscamos el opuesto y conocemos la hipotenusa. La razón que relaciona esos dos lados es el seno (SOH: opuesto ÷ hipotenusa), no el coseno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto OPUESTO?", formula: ["La razón seno relaciona el cateto opuesto con la hipotenusa: sin θ = opuesto ÷ hipotenusa.", "Despejando el opuesto: opuesto = hipotenusa × sin θ.", "Con hipotenusa = 10 y sin θ ≈ 0.6: opuesto = 10 × 0.6 ="],
+        opciones: ["8", "5", "6"], correcta: 2, explicacion: "opuesto = hipotenusa × sin θ = 10 × 0.6 = 6. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.6 (seno), no 0.8 (coseno)." },
     ] },
-  { n: 5, adj: "?", op: "9", hip: "15", buscar: "adyacente",
+  { n: 5, adj: "?", op: "9", hip: "15", buscar: "adyacente", conocidoLabel: "cateto opuesto", conocidoValor: "9",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
-        opciones: ["El lado opuesto", "La hipotenusa", "El lado adyacente"], correcta: 2 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
-        opciones: ["Coseno (adyacente/hipotenusa)", "Seno (opuesto/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 0 },
-      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 15 × 0.8 =",
-        opciones: ["12", "9", "18"], correcta: 0 },
+        opciones: ["El lado opuesto", "La hipotenusa", "El lado adyacente"], correcta: 2, explicacion: "El signo ? está en el lado adyacente; por eso es el que debemos hallar. La hipotenusa (15) y el cateto opuesto (9) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto opuesto. Buscamos el cateto adyacente. ¿Qué razón usamos?",
+        opciones: ["Coseno (adyacente/hipotenusa)", "Seno (opuesto/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 0, explicacion: "Buscamos el adyacente y conocemos la hipotenusa. La razón que relaciona esos dos lados es el coseno (CAH: adyacente ÷ hipotenusa), no el seno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto ADYACENTE?", formula: ["La razón coseno relaciona el cateto adyacente con la hipotenusa: cos θ = adyacente ÷ hipotenusa.", "Despejando el adyacente: adyacente = hipotenusa × cos θ.", "Con hipotenusa = 15 y cos θ ≈ 0.8: adyacente = 15 × 0.8 ="],
+        opciones: ["12", "9", "18"], correcta: 0, explicacion: "adyacente = hipotenusa × cos θ = 15 × 0.8 = 12. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.8 (coseno), no 0.6 (seno)." },
     ] },
-  { n: 6, adj: "12", op: "?", hip: "15", buscar: "opuesto",
+  { n: 6, adj: "12", op: "?", hip: "15", buscar: "opuesto", conocidoLabel: "cateto adyacente", conocidoValor: "12",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
-        opciones: ["La hipotenusa", "El lado adyacente", "El lado opuesto"], correcta: 2 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
-        opciones: ["Seno (opuesto/hipotenusa)", "Tangente (opuesto/adyacente)", "Coseno (adyacente/hipotenusa)"], correcta: 0 },
-      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 15 × 0.6 =",
-        opciones: ["9", "12", "7.5"], correcta: 0 },
+        opciones: ["La hipotenusa", "El lado adyacente", "El lado opuesto"], correcta: 2, explicacion: "El signo ? está en el lado opuesto; por eso es el que debemos hallar. La hipotenusa (15) y el cateto adyacente (12) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto adyacente. Buscamos el cateto opuesto. ¿Qué razón usamos?",
+        opciones: ["Seno (opuesto/hipotenusa)", "Tangente (opuesto/adyacente)", "Coseno (adyacente/hipotenusa)"], correcta: 0, explicacion: "Buscamos el opuesto y conocemos la hipotenusa. La razón que relaciona esos dos lados es el seno (SOH: opuesto ÷ hipotenusa), no el coseno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto OPUESTO?", formula: ["La razón seno relaciona el cateto opuesto con la hipotenusa: sin θ = opuesto ÷ hipotenusa.", "Despejando el opuesto: opuesto = hipotenusa × sin θ.", "Con hipotenusa = 15 y sin θ ≈ 0.6: opuesto = 15 × 0.6 ="],
+        opciones: ["9", "12", "7.5"], correcta: 0, explicacion: "opuesto = hipotenusa × sin θ = 15 × 0.6 = 9. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.6 (seno), no 0.8 (coseno)." },
     ] },
-  { n: 7, adj: "?", op: "12", hip: "20", buscar: "adyacente",
+  { n: 7, adj: "?", op: "12", hip: "20", buscar: "adyacente", conocidoLabel: "cateto opuesto", conocidoValor: "12",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
-        opciones: ["El lado adyacente", "La hipotenusa", "El lado opuesto"], correcta: 0 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
-        opciones: ["Tangente (opuesto/adyacente)", "Coseno (adyacente/hipotenusa)", "Seno (opuesto/hipotenusa)"], correcta: 1 },
-      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 20 × 0.8 =",
-        opciones: ["16", "20", "12"], correcta: 0 },
+        opciones: ["El lado adyacente", "La hipotenusa", "El lado opuesto"], correcta: 0, explicacion: "El signo ? está en el lado adyacente; por eso es el que debemos hallar. La hipotenusa (20) y el cateto opuesto (12) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto opuesto. Buscamos el cateto adyacente. ¿Qué razón usamos?",
+        opciones: ["Tangente (opuesto/adyacente)", "Coseno (adyacente/hipotenusa)", "Seno (opuesto/hipotenusa)"], correcta: 1, explicacion: "Buscamos el adyacente y conocemos la hipotenusa. La razón que relaciona esos dos lados es el coseno (CAH: adyacente ÷ hipotenusa), no el seno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto ADYACENTE?", formula: ["La razón coseno relaciona el cateto adyacente con la hipotenusa: cos θ = adyacente ÷ hipotenusa.", "Despejando el adyacente: adyacente = hipotenusa × cos θ.", "Con hipotenusa = 20 y cos θ ≈ 0.8: adyacente = 20 × 0.8 ="],
+        opciones: ["16", "20", "12"], correcta: 0, explicacion: "adyacente = hipotenusa × cos θ = 20 × 0.8 = 16. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.8 (coseno), no 0.6 (seno)." },
     ] },
-  { n: 8, adj: "16", op: "?", hip: "20", buscar: "opuesto",
+  { n: 8, adj: "16", op: "?", hip: "20", buscar: "opuesto", conocidoLabel: "cateto adyacente", conocidoValor: "16",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
-        opciones: ["El lado opuesto", "El lado adyacente", "La hipotenusa"], correcta: 0 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
-        opciones: ["Coseno (adyacente/hipotenusa)", "Seno (opuesto/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 1 },
-      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 20 × 0.6 =",
-        opciones: ["16", "10", "12"], correcta: 2 },
+        opciones: ["El lado opuesto", "El lado adyacente", "La hipotenusa"], correcta: 0, explicacion: "El signo ? está en el lado opuesto; por eso es el que debemos hallar. La hipotenusa (20) y el cateto adyacente (16) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto adyacente. Buscamos el cateto opuesto. ¿Qué razón usamos?",
+        opciones: ["Coseno (adyacente/hipotenusa)", "Seno (opuesto/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 1, explicacion: "Buscamos el opuesto y conocemos la hipotenusa. La razón que relaciona esos dos lados es el seno (SOH: opuesto ÷ hipotenusa), no el coseno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto OPUESTO?", formula: ["La razón seno relaciona el cateto opuesto con la hipotenusa: sin θ = opuesto ÷ hipotenusa.", "Despejando el opuesto: opuesto = hipotenusa × sin θ.", "Con hipotenusa = 20 y sin θ ≈ 0.6: opuesto = 20 × 0.6 ="],
+        opciones: ["16", "10", "12"], correcta: 2, explicacion: "opuesto = hipotenusa × sin θ = 20 × 0.6 = 12. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.6 (seno), no 0.8 (coseno)." },
     ] },
-  { n: 9, adj: "?", op: "15", hip: "25", buscar: "adyacente",
+  { n: 9, adj: "?", op: "15", hip: "25", buscar: "adyacente", conocidoLabel: "cateto opuesto", conocidoValor: "15",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
-        opciones: ["La hipotenusa", "El lado opuesto", "El lado adyacente"], correcta: 2 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el ADYACENTE. ¿Qué razón usamos?",
-        opciones: ["Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 1 },
-      { enunciado: "Calcula: adyacente = hipotenusa × cos θ = 25 × 0.8 =",
-        opciones: ["15", "20", "22"], correcta: 1 },
+        opciones: ["La hipotenusa", "El lado opuesto", "El lado adyacente"], correcta: 2, explicacion: "El signo ? está en el lado adyacente; por eso es el que debemos hallar. La hipotenusa (25) y el cateto opuesto (15) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto opuesto. Buscamos el cateto adyacente. ¿Qué razón usamos?",
+        opciones: ["Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)", "Tangente (opuesto/adyacente)"], correcta: 1, explicacion: "Buscamos el adyacente y conocemos la hipotenusa. La razón que relaciona esos dos lados es el coseno (CAH: adyacente ÷ hipotenusa), no el seno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto ADYACENTE?", formula: ["La razón coseno relaciona el cateto adyacente con la hipotenusa: cos θ = adyacente ÷ hipotenusa.", "Despejando el adyacente: adyacente = hipotenusa × cos θ.", "Con hipotenusa = 25 y cos θ ≈ 0.8: adyacente = 25 × 0.8 ="],
+        opciones: ["15", "20", "22"], correcta: 1, explicacion: "adyacente = hipotenusa × cos θ = 25 × 0.8 = 20. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.8 (coseno), no 0.6 (seno)." },
     ] },
-  { n: 10, adj: "20", op: "?", hip: "25", buscar: "opuesto",
+  { n: 10, adj: "20", op: "?", hip: "25", buscar: "opuesto", conocidoLabel: "cateto adyacente", conocidoValor: "20",
     pasos: [
       { enunciado: "¿Cuál lado debemos hallar en este triángulo?",
-        opciones: ["El lado adyacente", "El lado opuesto", "La hipotenusa"], correcta: 1 },
-      { enunciado: "Conocemos la hipotenusa y buscamos el OPUESTO. ¿Qué razón usamos?",
-        opciones: ["Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)"], correcta: 1 },
-      { enunciado: "Calcula: opuesto = hipotenusa × sin θ = 25 × 0.6 =",
-        opciones: ["20", "15", "10"], correcta: 1 },
+        opciones: ["El lado adyacente", "El lado opuesto", "La hipotenusa"], correcta: 1, explicacion: "El signo ? está en el lado opuesto; por eso es el que debemos hallar. La hipotenusa (25) y el cateto adyacente (20) ya están dados en la figura." },
+      { enunciado: "Conocemos la hipotenusa y el cateto adyacente. Buscamos el cateto opuesto. ¿Qué razón usamos?",
+        opciones: ["Tangente (opuesto/adyacente)", "Seno (opuesto/hipotenusa)", "Coseno (adyacente/hipotenusa)"], correcta: 1, explicacion: "Buscamos el opuesto y conocemos la hipotenusa. La razón que relaciona esos dos lados es el seno (SOH: opuesto ÷ hipotenusa), no el coseno ni la tangente." },
+      { enunciado: "¿Cuánto mide el cateto OPUESTO?", formula: ["La razón seno relaciona el cateto opuesto con la hipotenusa: sin θ = opuesto ÷ hipotenusa.", "Despejando el opuesto: opuesto = hipotenusa × sin θ.", "Con hipotenusa = 25 y sin θ ≈ 0.6: opuesto = 25 × 0.6 ="],
+        opciones: ["20", "15", "10"], correcta: 1, explicacion: "opuesto = hipotenusa × sin θ = 25 × 0.6 = 15. Si te dio otro número, revisa que multiplicaste (no dividiste) y que usaste 0.6 (seno), no 0.8 (coseno)." },
     ] },
 ];
 
 // Ayuda contextual del nivel Especial, según el paso (0: identificar lado, 1: elegir razón, 2: calcular)
 const AYUDA_PASO = [
   "La hipotenusa es el lado más largo y siempre está opuesta al ángulo recto (el cuadradito). El opuesto está enfrente del ángulo θ. El adyacente está pegado al ángulo θ, sin ser la hipotenusa.",
-  "Recuerda SOH-CAH-TOA: Seno = opuesto ÷ hipotenusa · Coseno = adyacente ÷ hipotenusa · Tangente = opuesto ÷ adyacente.",
-  "En este triángulo: sin θ ≈ 0.6 y cos θ ≈ 0.8.",
+  "Recuerda SOH-CAH-TOA: Seno = opuesto ÷ hipotenusa · Coseno = adyacente ÷ hipotenusa · Tangente = opuesto ÷ adyacente. Como ya conoces la hipotenusa y buscas un cateto, la razón correcta es seno o coseno (nunca tangente).",
+  "Toma el valor de la razón que elegiste en el paso anterior (0.6 si fue seno, 0.8 si fue coseno) y multiplícalo por la hipotenusa.",
 ];
 
 const CURSOS = ["1001", "1002", "1003", "1101", "1102", "1103"];
@@ -599,18 +600,29 @@ function App() {
           </div>
           <div style={{ fontSize: 11.5, color: C.muted, marginBottom: 12 }}>Paso {pasoIdx + 1} de 3</div>
 
+          <div style={{ background: "#eef4f2", border: `1px solid ${C.line}`, borderRadius: 10, padding: "10px 12px", fontSize: 12.5, color: C.inkSoft, marginBottom: 10 }}>
+            <strong>Datos de este triángulo:</strong> hipotenusa = {prob.hip}, {prob.conocidoLabel} = {prob.conocidoValor}.
+            El ángulo θ marcado mide aproximadamente 37°, y para ese ángulo siempre se cumple: sin 37° ≈ 0.6 y cos 37° ≈ 0.8.
+          </div>
+
           <div style={{ background: "#fdf2e3", border: `1px solid ${C.amber}`, borderRadius: 10, padding: "8px 12px", fontSize: 12.5, color: C.inkSoft, marginBottom: 14 }}>
             💡 {AYUDA_PASO[pasoIdx]}
           </div>
 
           <div style={{ margin: "6px 0 14px", padding: 12, background: C.paper, borderRadius: 12, display: "flex", justifyContent: "center" }}>
-            <Triangulo orient="A" adj={prob.adj} op={prob.op} hip={prob.hip} />
+            <Triangulo orient="A" adj={prob.adj} op={prob.op} hip={prob.hip} angleLabel="θ≈37°" />
           </div>
 
-          <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+          <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
             <span style={{ background: C.ink, color: "#fff", borderRadius: 8, padding: "3px 10px", fontWeight: 700, fontSize: 13, height: "fit-content" }}>{pasoIdx + 1}</span>
-            <p style={{ margin: 0, color: C.inkSoft, fontSize: 15.5, lineHeight: 1.55 }}>{paso.enunciado}</p>
+            <p style={{ margin: 0, color: C.inkSoft, fontSize: 15.5, lineHeight: 1.55, fontWeight: 700 }}>{paso.enunciado}</p>
           </div>
+
+          {paso.formula && (
+            <div style={{ background: "#eef2fb", border: `1px solid #c7d3ef`, borderRadius: 10, padding: "12px 14px", marginBottom: 16, fontSize: 13.5, color: C.inkSoft, lineHeight: 1.6 }}>
+              {paso.formula.map((linea, i) => <div key={i} style={{ marginTop: i === 0 ? 0 : 4 }}>{linea}</div>)}
+            </div>
+          )}
 
           <div style={{ display: "grid", gap: 10 }}>
             {paso.opciones.map((op, i) => {
@@ -637,9 +649,16 @@ function App() {
           </div>
 
           {respondido && (
-            <p style={{ fontSize: 13, color: seleccion === paso.correcta ? C.good : C.bad, marginTop: 14, fontWeight: 700 }}>
-              {seleccion === paso.correcta ? "¡Muy bien! Es correcto." : "No es correcto, la respuesta correcta está en verde. Sigamos."}
-            </p>
+            <div style={{ marginTop: 14 }}>
+              <p style={{ fontSize: 13, color: seleccion === paso.correcta ? C.good : C.bad, fontWeight: 700, margin: "0 0 6px" }}>
+                {seleccion === paso.correcta ? "¡Muy bien! Es correcto." : "No es correcto."}
+              </p>
+              {paso.explicacion && (
+                <div style={{ background: "#eef2fb", border: `1px solid #c7d3ef`, borderRadius: 10, padding: "10px 14px", fontSize: 13.5, color: C.inkSoft, lineHeight: 1.55 }}>
+                  {paso.explicacion}
+                </div>
+              )}
+            </div>
           )}
 
           <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 18 }}>
@@ -656,7 +675,7 @@ function App() {
   // ---- Examen (Fácil / Intermedio / Avanzado) ----
   const p = PREGUNTAS[idx];
   const seleccion = respuestas[idx];
-  const revisando = contestadas === total || enviado;
+  const contestada = seleccion !== null;
   return (
     <div style={{ ...wrap, fontFamily: ff }}>
       <div style={{ ...card, maxWidth: 760, margin: "0 auto" }}>
@@ -686,23 +705,36 @@ function App() {
             const elegida = seleccion === i;
             const esCorrecta = i === p.correcta;
             let bg = C.card, bd = C.line;
-            if (revisando) {
+            if (contestada) {
               if (esCorrecta) { bg = "#eaf6ef"; bd = C.good; }
               else if (elegida) { bg = "#fbece9"; bd = C.bad; }
-            } else if (elegida) { bg = "#fdf2e3"; bd = C.amber; }
+            }
             return (
-              <button key={i} onClick={() => !revisando && elegir(i)}
+              <button key={i} onClick={() => !contestada && elegir(i)}
                 style={{ textAlign: "left", display: "flex", gap: 12, alignItems: "flex-start", padding: "12px 14px",
-                  borderRadius: 12, border: `2px solid ${bd}`, background: bg, cursor: revisando ? "default" : "pointer",
+                  borderRadius: 12, border: `2px solid ${bd}`, background: bg, cursor: contestada ? "default" : "pointer",
                   fontSize: 14.5, color: C.inkSoft }}>
-                <span style={{ fontWeight: 800, color: elegida || (revisando && esCorrecta) ? C.ink : C.muted, minWidth: 16 }}>{letra}</span>
+                <span style={{ fontWeight: 800, color: elegida || (contestada && esCorrecta) ? C.ink : C.muted, minWidth: 16 }}>{letra}</span>
                 <span style={{ flex: 1 }}>{op}</span>
-                {revisando && esCorrecta && <span style={{ color: C.good, fontWeight: 800 }}>✓</span>}
-                {revisando && elegida && !esCorrecta && <span style={{ color: C.bad, fontWeight: 800 }}>✗</span>}
+                {contestada && esCorrecta && <span style={{ color: C.good, fontWeight: 800 }}>✓</span>}
+                {contestada && elegida && !esCorrecta && <span style={{ color: C.bad, fontWeight: 800 }}>✗</span>}
               </button>
             );
           })}
         </div>
+
+        {contestada && (
+          <div style={{ marginTop: 14 }}>
+            <p style={{ fontSize: 13, color: seleccion === p.correcta ? C.good : C.bad, fontWeight: 700, margin: "0 0 6px" }}>
+              {seleccion === p.correcta ? "¡Correcto!" : "No es correcto."}
+            </p>
+            {p.explicacion && (
+              <div style={{ background: "#eef2fb", border: `1px solid #c7d3ef`, borderRadius: 10, padding: "10px 14px", fontSize: 13.5, color: C.inkSoft, lineHeight: 1.55 }}>
+                {p.explicacion}
+              </div>
+            )}
+          </div>
+        )}
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, gap: 10 }}>
           <button onClick={() => setIdx((v) => Math.max(0, v - 1))} disabled={idx === 0} style={{ ...btnGhost, opacity: idx === 0 ? 0.4 : 1 }}>← Anterior</button>
