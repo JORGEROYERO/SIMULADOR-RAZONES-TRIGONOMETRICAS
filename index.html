@@ -640,7 +640,11 @@ function App() {
       "&fecha=" + encodeURIComponent(new Date().toLocaleString("es-CO")) +
       "&fingerprint=" + encodeURIComponent(generarFingerprint()) +
       pArr.map((v, i) => "&p" + (i + 1) + "=" + encodeURIComponent(v)).join("");
-    window.open(url, "_blank");
+    // Envío en segundo plano: no abre pestaña ni navega fuera del simulador.
+    // La imagen invisible dispara la petición GET; el navegador la ejecuta igual
+    // aunque nunca se vea la respuesta ni se cargue nada visible.
+    const beacon = new Image();
+    beacon.src = url;
     setEnviado(true);
   };
 
@@ -767,7 +771,7 @@ function App() {
           </div>
           {enviado && (
             <p style={{ textAlign: "center", color: C.good, fontSize: 12.5, marginTop: 12 }}>
-              Se abrió una pestaña para enviar los datos. Si no se registró, verifica que la URL del script esté
+              Tus datos se enviaron a Google Sheets. Si no se registró, verifica que la URL del script esté
               desplegada como aplicación web (termina en /exec).
             </p>
           )}
