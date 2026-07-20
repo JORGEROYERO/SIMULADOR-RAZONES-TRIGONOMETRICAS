@@ -650,6 +650,18 @@ function App() {
     setFase("resultados");
   };
 
+  // Vuelve a la pantalla de selección de nivel, manteniendo el nombre y el curso ya elegidos
+  const cambiarNivel = () => {
+    setNivel(null);
+    setIdx(0);
+    setRespuestas([]);
+    setProbIdx(0);
+    setPasoIdx(0);
+    setRespGuiado(PROBLEMAS_ESPECIAL.map(() => [null, null, null]));
+    setEnviado(false);
+    setFase("registro");
+  };
+
   const ff = "'Segoe UI', system-ui, -apple-system, sans-serif";
 
   // ---- Registro (curso, nombre y nivel en una sola pantalla) ----
@@ -751,6 +763,7 @@ function App() {
             {!esGuiado && (
               <button onClick={() => { setFase("examen"); setIdx(0); }} style={{ ...btnGhost }}>Revisar respuestas</button>
             )}
+            <button onClick={cambiarNivel} style={{ ...btnGhost }}>Cambiar de nivel</button>
           </div>
           {enviado && (
             <p style={{ textAlign: "center", color: C.good, fontSize: 12.5, marginTop: 12 }}>
