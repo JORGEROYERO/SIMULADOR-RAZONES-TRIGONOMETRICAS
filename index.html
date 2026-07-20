@@ -598,6 +598,7 @@ function App() {
   const elegirNivel = (nv) => {
     if (!nombre.trim() || !curso.trim()) return;
     setNivel(nv.id);
+    setEnviado(false);
     if (nv.id === "Especial (NEE)") {
       setProbIdx(0);
       setPasoIdx(0);
@@ -641,6 +642,12 @@ function App() {
       pArr.map((v, i) => "&p" + (i + 1) + "=" + encodeURIComponent(v)).join("");
     window.open(url, "_blank");
     setEnviado(true);
+  };
+
+  // Envío automático al terminar (una sola vez, al responder la última pregunta o el último paso guiado)
+  const finalizar = () => {
+    if (!enviado) enviarSheets();
+    setFase("resultados");
   };
 
   const ff = "'Segoe UI', system-ui, -apple-system, sans-serif";
@@ -796,7 +803,7 @@ function App() {
     const siguiente = () => {
       if (!esUltimoPaso) { setPasoIdx(pasoIdx + 1); return; }
       if (!esUltimoProblema) { setProbIdx(probIdx + 1); setPasoIdx(0); return; }
-      setFase("resultados");
+      finalizar();
     };
 
     return (
@@ -952,7 +959,7 @@ function App() {
           {idx < total - 1 ? (
             <button onClick={() => setIdx((v) => Math.min(total - 1, v + 1))} style={{ ...btn }}>Siguiente →</button>
           ) : (
-            <button onClick={() => setFase("resultados")} style={{ ...btn, background: C.good }}>Finalizar y ver resultados</button>
+            <button onClick={finalizar} style={{ ...btn, background: C.good }}>Finalizar y ver resultados</button>
           )}
         </div>
 
